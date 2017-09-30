@@ -1,0 +1,34 @@
+{
+  "name": "notification_microservice",
+  "version": "1.0.0",
+  "description": "Api for notificaiton",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --rootDir ./src/",
+    "start": "ts-node index.ts",
+    "start:debug": "ts-node --inspect=5858 --debug-brk --ignore false src/index.ts"
+  },
+  "author": "Romain Diegoni",
+  "license": "ISC",
+  "dependencies": {
+    "agenda": "1.0.0",
+    "cluster": "0.7.7",
+    "debug": "3.0.1",
+    "jsonschema": "1.2.0",
+    "koa": "^2.3.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.0.1",
+    "koa-router": "^7.2.1",
+    "mongodb": "^2.2.31",
+    "os": "0.1.1",
+    "typescript-ioc": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/koa": "2.0.39",
+    "@types/koa-bodyparser": "3.0.25",
+    "@types/koa-logger": "2.0.2",
+    "@types/koa-router": "7.0.23",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.2"
+  }
+}

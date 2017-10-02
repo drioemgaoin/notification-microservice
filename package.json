@@ -4,14 +4,17 @@
   "description": "Api for notificaiton",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --rootDir ./src/",
-    "start": "ts-node index.ts",
-    "start:debug": "ts-node --inspect=5858 --debug-brk --ignore false src/index.ts"
+    "web": "PROCESS_TYPE='web' ts-node index.ts",
+    "worker": "PROCESS_TYPE='notification-worker' ts-node index.ts",
+    "build": "rimraf web/dist/* && webpack",
+    "dev": "webpack-dev-server"
   },
   "author": "Romain Diegoni",
   "license": "ISC",
   "dependencies": {
-    "agenda": "1.0.0",
+    "@types/react": "16.0.7",
+    "@types/react-dom": "15.5.5",
+    "@types/react-router": "4.0.15",
     "cluster": "0.7.7",
     "debug": "3.0.1",
     "jsonschema": "1.2.0",
@@ -19,16 +22,28 @@
     "koa-bodyparser": "^4.2.0",
     "koa-logger": "^3.0.1",
     "koa-router": "^7.2.1",
+    "lodash": "4.17.4",
     "mongodb": "^2.2.31",
-    "os": "0.1.1",
-    "typescript-ioc": "^1.0.2"
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "react-router": "4.2.0",
+    "typescript-ioc": "^1.0.2",
+    "webpack": "3.6.0"
   },
   "devDependencies": {
     "@types/koa": "2.0.39",
     "@types/koa-bodyparser": "3.0.25",
     "@types/koa-logger": "2.0.2",
     "@types/koa-router": "7.0.23",
+    "@types/lodash": "4.14.76",
+    "@types/react": "16.0.7",
+    "@types/react-dom": "15.5.5",
+    "awesome-typescript-loader": "3.2.3",
+    "html-webpack-plugin": "2.30.1",
+    "source-map-loader": "0.2.2",
     "ts-node": "^3.3.0",
-    "typescript": "^2.5.2"
+    "typescript": "2.5.3",
+    "webpack": "3.6.0",
+    "webpack-dev-server": "2.9.1"
   }
 }

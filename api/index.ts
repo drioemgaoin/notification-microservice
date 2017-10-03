@@ -7,6 +7,7 @@ import * as Http from "http";
 import { Container } from "typescript-ioc";
 
 import NotificationRoutes from './routes/notificationRoutes';
+import DatabaseService, { IDatabaseService } from './config/database';
 
 const app: Koa = new Koa();
 
@@ -51,5 +52,9 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(Serve(`${__dirname}/public`));
 
-console.log("Notification Api started listening on port 3002...");
-app.listen(3002);
+const databaseService: IDatabaseService = new DatabaseService('mongodb://localhost:27017/notification');
+databaseService.start();
+
+app.listen(3002, () => console.log("Notification Api started listening on port 3002..."));
+
+process.on('SIGINT', () => databaseService.stop(() => process.exit(0)));

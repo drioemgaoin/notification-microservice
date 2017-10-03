@@ -2,7 +2,6 @@ import { IRouterContext } from "koa-router";
 
 export default class NotificationController {
     public async getAll(ctx: IRouterContext) {
-        console.log('GET ALL')
         ctx.body = {};
     }
 

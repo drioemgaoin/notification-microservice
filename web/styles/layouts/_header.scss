@@ -1,6 +1,9 @@
 .App {
     &__header {
+        background: $header-background-color;
+        color: $header-color;
         height: 100px;
+        line-height: 100px;
         text-align: center;
     }
 }

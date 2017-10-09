@@ -1,0 +1,25 @@
+.properties {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    background: $panel-background-color;
+    color: $panel-color;
+    padding: 10px;
+
+    &__property {
+        padding: 5px;
+        &__label,
+        &__value {
+            display: inline-block;
+        }
+
+        &__label {
+            text-transform: capitalize;
+            width: 200px;
+        }
+
+        &__value {
+            width: calc(100% - 210px);
+        }
+    }
+}

@@ -2,9 +2,12 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 
+import Components from './toolbox/index';
+
 export interface RendererProps {
     connectDropTarget?: any;
     addComponent?: (component: any) => void;
+    onClick?: (component: any) => void;
 }
 
 const boxTarget = {
@@ -25,9 +28,16 @@ class Renderer extends React.Component<any, any> {
 
         this.state = { components: [] };
     }
+
     addComponent(component: any) {
         const components = this.state.components.concat(
-            React.createElement(eval(component.name), { rendered: true, key: 'component-' + (this.state.components.length + 1) })
+            React.createElement(
+                (Components as any)[component.name],
+                {
+                    key: 'component-' + (this.state.components.length + 1),
+                    rendered: true,
+                    onClick: this.props.onClick
+                })
         );
 
         this.setState({ components });

@@ -6,10 +6,12 @@ export default class Properties extends React.Component<any, any> {
     };
 
     render() {
-        return (
+        const keys = Object.keys(this.props.properties);
+        return keys.length > 0 &&
+        (
             <div className='properties'>
                 {
-                    Object.keys(this.props.properties).map((key: any) => {
+                    keys.map((key: any) => {
                         return (
                             <div key={key} className='properties__property'>
                                 <label className='properties__property__label'>{key}</label>

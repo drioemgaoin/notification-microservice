@@ -9,11 +9,13 @@ import Properties from './Properties';
 
 class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
+    private onValidateBound = this.validate.bind(this);
+    private onCancelBound = this.cancel.bind(this);
 
     constructor(props: any) {
         super(props);
 
-        this.state = { properties: {} };
+        this.state = { properties: [] };
     }
 
     render() {
@@ -23,12 +25,18 @@ class App extends React.Component<any, any> {
                     <h2>Notification UI</h2>
                 </div>
                 <div className='App__body'>
-                    {this.state.properties && (<Properties properties={this.state.properties} />)}
-
+                    {
+                        this.state.properties.length > 0 &&
+                        (
+                            <Properties properties={this.state.properties}
+                                        onValidate={this.onValidateBound}
+                                        onCancel={this.onCancelBound} />
+                        )
+                    }
                     <Panel opened={true}>
                         <Toolbox />
                     </Panel>
-                    
+
                     <Renderer onClick={this.onClickBound}/>
                 </div>
                 <div className='App__footer'>
@@ -37,8 +45,17 @@ class App extends React.Component<any, any> {
         );
     }
 
-    private onClick(component: any) {
-        this.setState({ properties: component.props });
+    private onClick(properties: any, callback: any) {
+        this.setState({ properties, callback });
+    }
+
+    private cancel() {
+        this.setState({ properties: [] });
+    }
+
+    private validate(values: any) {
+        this.setState({ properties: [] });
+        this.state.callback(values);
     }
 }
 

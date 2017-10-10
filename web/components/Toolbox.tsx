@@ -1,12 +1,14 @@
 import * as React from 'react';
 
-import Date, { DateConfigProps } from './toolbox/Date';
+import Date from './toolbox/date/Date';
+import Select from './toolbox/select/Select';
 
 export default class Toolbox extends React.Component<any, any> {
     render() {
         return (
             <ol className='Toolbox'>
-                <li><Date value='29/11/1982' /></li>
+                <li><Date /></li>
+                <li><Select /></li>
             </ol>
         );
     }

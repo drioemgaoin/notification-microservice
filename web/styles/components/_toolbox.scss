@@ -1,15 +1,16 @@
 .Toolbox {
     list-style: none;
     margin: 0;
+    padding: 0px;
 
     > li {
-        padding: 5px;
+        padding: 5px 0px;
         height: 40px;
         line-height: 40px;
-    }
 
-    &:hover {
-        cursor: pointer;
-        background: $panel-hover-background-color;
+        &:hover {
+            cursor: pointer;
+            background: $panel-hover-background-color;
+        }
     }
 }

@@ -1,7 +1,7 @@
 import Date from './date/Date';
-import Select from './select/Select';
+import List from './list/List';
 
 export default {
     'Date': Date,
-    'Select': Select
+    'List': List
 }

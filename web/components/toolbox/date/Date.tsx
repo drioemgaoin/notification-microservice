@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import * as moment from 'moment';
 import { pick } from 'lodash';
 
-import { getOptions, getValue } from './util';
+import getSchema from './schema';
 
 interface DateProps extends DateDndProps {
     value?: any;
@@ -60,18 +60,7 @@ class Date extends React.Component<DateProps, any> {
 
     private onClick() {
         if (this.props.onClick) {
-            const context: any = this.state;
-            const propTypes = (Date as any).propTypes;
-            const properties = Object.keys(propTypes).map((name: string) => {
-                return {
-                    name,
-                    value: getValue(name, context),
-                    options: getOptions(name),
-                    type: propTypes[name]
-                };
-            })
-
-            this.props.onClick(properties, this.onCallbackBound);
+            this.props.onClick(getSchema(this.state), this.onCallbackBound);
         }
     }
 }

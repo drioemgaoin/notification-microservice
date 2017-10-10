@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import { assign, find } from 'lodash';
+import ListItems from './components/list/ListItems';
 
 export default class Properties extends React.Component<any, any> {
     private onOkBound = this.validate.bind(this);
     private onCancelBound = this.cancel.bind(this);
-    private onSelectChangeBound = this.selectChanged.bind(this);
-    private onInputChangeBound = this.inputChanged.bind(this);
+    private onChangeBound = this.change.bind(this);
+    private onComponentChangeBound = this.componentChange.bind(this);
 
     static defaultProps = {
         properties: []
@@ -43,11 +44,11 @@ export default class Properties extends React.Component<any, any> {
     }
 
     private renderValue(property: any) {
-        if (property.options) {
+        if (property.component === 'select') {
             return (
                 <select name={property.name}
                         className='select'
-                        onChange={this.onSelectChangeBound}
+                        onChange={this.onChangeBound}
                         value={this.state[property.name]}>
                 {
                     property.options.map((option: any) => {
@@ -56,24 +57,28 @@ export default class Properties extends React.Component<any, any> {
                 }
                 </select>
             );
+        } else if (property.component === 'list') {
+            return (
+                <ListItems name={property.name}
+                        items={this.state[property.name]}
+                        onChange={(value: any) => this.onComponentChangeBound(property.name, value)} />
+            );
         }
 
         return (
             <input name={property.name}
-                type='date'
+                type={property.component}
                 className='properties__property__value'
                 value={this.state[property.name]}
-                onChange={this.onInputChangeBound} />
+                onChange={this.onChangeBound} />
         );
     }
 
-    private selectChanged(e: React.SyntheticEvent<HTMLSelectElement>) {
-        e.preventDefault();
-
-        this.setState({ [e.currentTarget.name]: e.currentTarget.value });
+    private componentChange(name: string, value: any) {
+        this.setState({ [name]: value });
     }
 
-    private inputChanged(e: React.SyntheticEvent<HTMLInputElement>) {
+    private change(e: any) {
         e.preventDefault();
 
         this.setState({ [e.currentTarget.name]: e.currentTarget.value });

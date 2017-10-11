@@ -13,17 +13,19 @@ export interface RendererProps {
 const specTarget: DropTargetSpec<RendererProps> = {
     drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
         const item: any = monitor.getItem();
-        const components = component.state.components.concat(
-            React.createElement(
-                (Components as any)[item.name],
-                {
-                    key: 'component-' + (component.state.components.length + 1),
-                    rendered: true,
-                    onClick: component.props.onClick
-                })
-        );
+        if (!item.rendered) {
+            const components = component.state.components.concat(
+                React.createElement(
+                    (Components as any)[item.name],
+                    {
+                        key: 'component-' + (component.state.components.length + 1),
+                        rendered: true,
+                        onClick: component.props.onClick
+                    })
+            );
 
-        component.setState({ components });
+            component.setState({ components });
+        }
     }
 }
 

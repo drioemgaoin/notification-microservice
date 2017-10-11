@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DragSource, DragElementWrapper, DragSourceOptions } from 'react-dnd';
+import { DragSource, DropTarget, DragSourceConnector, DragSourceMonitor, DropTargetMonitor, DragSourceSpec, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 import * as PropTypes from 'prop-types';
 import * as moment from 'moment';
 import { pick } from 'lodash';
@@ -10,24 +10,37 @@ interface DateProps extends DateDndProps {
     value?: any;
     format?: string;
     rendered?: boolean;
-    onClick: (component: any, callback: any) => void;
+    onClick?: (component: any, callback: any) => void;
 }
 
 export interface DateDndProps {
     connectDragSource?: any;
+    connectDropTarget?: any;
 }
 
-const boxSource = {
-    beginDrag(props: any) {
-        return { name: 'Date' };
+const specSource: DragSourceSpec<DateProps> = {
+    beginDrag(props: DateProps) {
+        return { name: 'Date', rendered: props.rendered };
     }
 };
 
-const collect = (connect: any, monitor: any) => ({
+const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
     connectDragSource: connect.dragSource()
 });
 
-class Date extends React.Component<DateProps, any> {
+const specTarget: DropTargetSpec<DateProps> = {
+    hover(props: DateProps, monitor: DropTargetMonitor, component: React.Component<any, any>) {
+
+    }
+}
+
+const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+    connectDropTarget: connect.dropTarget()
+});
+
+@DragSource('Component', specSource, collectSource)
+@DropTarget('Component', specTarget, collectTarget)
+export default class Date extends React.Component<DateProps, any> {
     private onClickBound = this.onClick.bind(this);
     private onCallbackBound = this.onCallback.bind(this);
 
@@ -47,8 +60,24 @@ class Date extends React.Component<DateProps, any> {
 
     render() {
         return this.props.rendered
-            ? ( <div className='date' onClick={this.onClickBound}>{moment(this.state.value).format(this.state.format)}</div> )
-            : ( this.props.connectDragSource(<div title='Display the date with the expected format'>Date</div>) );
+            ? this.renderDragged()
+            : this.renderDraggable();
+    }
+
+    private renderDraggable() {
+        return this.props.connectDragSource(
+            <div className='date date--draggable'>Date</div>
+        );
+    }
+
+    private renderDragged() {
+        return this.props.connectDragSource(
+            this.props.connectDropTarget(
+                <div className='date date--dragged' onClick={this.onClickBound}>
+                {moment(this.state.value).format(this.state.format)}
+                </div>
+            )
+        );
     }
 
     onCallback(values: any) {
@@ -69,5 +98,3 @@ class Date extends React.Component<DateProps, any> {
     value: PropTypes.any,
     format: PropTypes.string
 };
-
-export default DragSource('Component', boxSource, collect)(Date);

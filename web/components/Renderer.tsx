@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
+import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 
 import Components from './toolbox/index';
 
@@ -10,37 +10,33 @@ export interface RendererProps {
     onClick?: (component: any) => void;
 }
 
-const boxTarget = {
-    drop(props: any, monitor: any, component: any) {
-        component.addComponent(monitor.getItem())
-    },
-};
-
-const collect = (connect: any, monitor: any) => {
-    return {
-        connectDropTarget: connect.dropTarget()
-    };
-}
-
-class Renderer extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
-
-        this.state = { components: [] };
-    }
-
-    addComponent(component: any) {
-        const components = this.state.components.concat(
+const specTarget: DropTargetSpec<RendererProps> = {
+    drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
+        const item: any = monitor.getItem();
+        const components = component.state.components.concat(
             React.createElement(
-                (Components as any)[component.name],
+                (Components as any)[item.name],
                 {
-                    key: 'component-' + (this.state.components.length + 1),
+                    key: 'component-' + (component.state.components.length + 1),
                     rendered: true,
-                    onClick: this.props.onClick
+                    onClick: component.props.onClick
                 })
         );
 
-        this.setState({ components });
+        component.setState({ components });
+    }
+}
+
+const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+    connectDropTarget: connect.dropTarget()
+});
+
+@DropTarget('Component', specTarget, collectTarget)
+export default class Renderer extends React.Component<RendererProps, any> {
+    constructor(props: RendererProps) {
+        super(props);
+
+        this.state = { components: [] };
     }
 
     render() {
@@ -54,11 +50,4 @@ class Renderer extends React.Component<any, any> {
     }
 }
 
-(Renderer as any).propTypes = {
-    connectDragSource: PropTypes.func,
-    isOver: PropTypes.bool,
-    canDrop: PropTypes.bool,
-    addComponent: PropTypes.func
-};
-
-export default DropTarget('Component', boxTarget, collect)(Renderer);
+(Renderer as any).propTypes = {};

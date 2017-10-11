@@ -1,30 +1,43 @@
 import * as React from 'react';
-import { DragSource, DragElementWrapper, DragSourceOptions } from 'react-dnd';
+import { DragSource, DropTarget, DragSourceConnector, DragSourceMonitor, DropTargetMonitor, DragSourceSpec, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 import * as PropTypes from 'prop-types';
 
 import getSchema from './schema';
 
 interface ListProps extends ListDndProps {
     rendered?: boolean;
-    items: string[];
-    onClick: (component: any, callback: any) => void;
+    items?: string[];
+    onClick?: (component: any, callback: any) => void;
 }
 
 export interface ListDndProps {
     connectDragSource?: any;
+    connectDropTarget?: any;
 }
 
-const boxSource = {
-    beginDrag(props: any) {
-        return { name: 'List' };
+const specSource: DragSourceSpec<ListProps> = {
+    beginDrag(props: ListProps) {
+        return { name: 'List', rendered: props.rendered };
     }
 };
 
-const collect = (connect: any, monitor: any) => ({
+const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
     connectDragSource: connect.dragSource()
 });
 
-class List extends React.Component<ListProps, any> {
+const specTarget: DropTargetSpec<ListProps> = {
+    hover(props: ListProps, monitor: DropTargetMonitor, component: React.Component<any, any>) {
+
+    }
+}
+
+const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+    connectDropTarget: connect.dropTarget()
+});
+
+@DragSource('Component', specSource, collectSource)
+@DropTarget('Component', specTarget, collectTarget)
+export default class List extends React.Component<ListProps, any> {
     private onClickBound = this.onClick.bind(this);
     private onCallbackBound = this.onCallback.bind(this);
 
@@ -42,30 +55,43 @@ class List extends React.Component<ListProps, any> {
 
     render() {
         return this.props.rendered
-            ? this.renderComponent()
-            : ( this.props.connectDragSource(<div title='Display the list of values'>List</div>) );
+            ? this.renderDragged()
+            : this.renderDraggable()
+    }
+
+    private renderDraggable() {
+        return this.props.connectDragSource(
+            <div className='list list--draggable'>List</div>
+        );
+    }
+
+    private renderDragged() {
+        return this.props.connectDragSource(
+            this.props.connectDropTarget(
+                <div className='list list--dragged' onClick={this.onClickBound}>
+                {
+                    this.state.items.length > 0
+                    ? (
+                        <ul className='list' onClick={this.onClickBound}>
+                        {
+                            this.state.items.map((item: any) => {
+                                return <li>{item}</li>;
+                            })
+                        }
+                        </ul>
+                    ) : (
+                        <div className='list' onClick={this.onClickBound}>Empty List</div>
+                    )
+                }
+                </div>
+            )
+        );
     }
 
     onCallback(values: any) {
-        console.log(values);
         this.setState({
             items: values['items']
         });
-    }
-
-    private renderComponent() {
-        return this.state.items.length > 0
-        ? (
-            <ul className='list' onClick={this.onClickBound}>
-            {
-                this.state.items.map((item: any) => {
-                    return <li>{item}</li>;
-                })
-            }
-            </ul>
-        ) : (
-            <div className='list' onClick={this.onClickBound}>Empty List</div>
-        );
     }
 
     private onClick() {
@@ -78,5 +104,3 @@ class List extends React.Component<ListProps, any> {
 (List as any).propTypes = {
     items: PropTypes.arrayOf(PropTypes.string).isRequired
 };
-
-export default DragSource('Component', boxSource, collect)(List);

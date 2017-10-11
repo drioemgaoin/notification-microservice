@@ -2,10 +2,14 @@
 @import 'base/base';
 @import 'base/typography';
 
+@import 'helpers/mixins';
+
 @import 'components/panel';
 @import 'components/toolbox';
 @import 'components/renderer';
 @import 'components/properties';
+@import 'components/date';
+@import 'components/text';
 
 @import 'layouts/base';
 @import 'layouts/header';

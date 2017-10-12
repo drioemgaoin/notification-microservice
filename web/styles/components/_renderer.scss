@@ -1,5 +1,7 @@
 .Renderer {
-    display: inline-block;
-    width: calc(100% - 201px);
-    height: 100%;
+    position: absolute;
+    top: $ruler-size;
+    left: $ruler-size;
+    width: calc(100% - #{$ruler-size});
+    height: calc(100% - #{$ruler-size});
 }

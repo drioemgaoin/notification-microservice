@@ -1,0 +1,31 @@
+.Ruler {
+    display: inline-block;
+    position: relative;
+    width: calc(100% - 201px);
+    height: 100%;
+
+    &__corner {
+        height: $ruler-size;
+        width: $ruler-size;
+        background: $header-background-color;
+        border-bottom: 1px solid $header-background-color;
+        border-right: 1px solid $header-background-color;
+        float: left;
+    }
+
+    &__horizontal {
+        overflow: hidden;
+        width: calc(100% - calc(#{$ruler-size} + 1px));
+        height: $ruler-size;
+        float: left;
+        border-bottom: 1px solid $header-background-color;
+    }
+
+    &__vertical {
+        overflow: hidden;
+        height: calc(100% - calc(#{$ruler-size} + 1px));
+        width: $ruler-size;
+        clear: both;
+        border-right: 1px solid $header-background-color;
+    }
+}

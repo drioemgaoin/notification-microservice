@@ -6,6 +6,7 @@ import Panel from './Panel';
 import Toolbox from './Toolbox';
 import Renderer from './Renderer';
 import Properties from './Properties';
+import Ruler from './Ruler';
 
 class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
@@ -37,7 +38,9 @@ class App extends React.Component<any, any> {
                         <Toolbox />
                     </Panel>
 
-                    <Renderer onClick={this.onClickBound}/>
+                    <Ruler>
+                        <Renderer onClick={this.onClickBound}/>
+                    </Ruler>
                 </div>
                 <div className='App__footer'>
                 </div>

@@ -1,0 +1,19 @@
+.structure {
+    width: 100%;
+    height: 50px;
+
+    > div {
+        display: inline-block;
+        width: inherit;
+        height: inherit;
+        outline: #2FAADE dashed 1px;
+        background: rgba(222,242,250,.85);
+        outline-offset: -1px;
+        text-align: center;
+
+        > span {
+            color: #2FAADE;
+            line-height: 50px;
+        }
+    }
+}

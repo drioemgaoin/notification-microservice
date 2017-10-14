@@ -4,4 +4,5 @@
     left: $ruler-size;
     width: calc(100% - #{$ruler-size});
     height: calc(100% - #{$ruler-size});
+    padding: 1px;
 }

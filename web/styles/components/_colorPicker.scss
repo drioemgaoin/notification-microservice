@@ -1,0 +1,25 @@
+.color-picker {
+    height: 30px;
+    line-height: 30px;
+    width: 160px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    &__control {
+        &__preview {
+            width: 24px;
+            height: 24px;
+            float: left;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        &__title {
+            @include noselect();
+            width: calc(100% - 40px);
+            float: right;
+            text-transform: uppercase;
+            padding: 0px 5px;
+        }
+    }
+}

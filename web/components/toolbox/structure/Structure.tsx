@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {times} from 'lodash';
 import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
+import * as PropTypes from 'prop-types';
 
 interface StructureProps extends StructureDndProps {
     numberOfColumns?: number;
@@ -51,3 +52,7 @@ export default class Structure extends React.Component<any, any> {
         );
     }
 }
+
+(Structure as any).propTypes = {
+    value: PropTypes.any
+};

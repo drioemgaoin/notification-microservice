@@ -1,0 +1,60 @@
+.select {
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    &__control {
+        height: 30px;
+
+        &--opened {
+            border-bottom: 1px solid $border-color;
+        }
+
+        &__input {
+            float: left;
+            width: calc(100% - 40px);
+            height: 20px;
+            cursor: pointer;
+            text-transform: capitalize;
+            padding: 5px;
+        }
+
+        &__arrow {
+            &__zone {
+                height: 30px;
+                width: 30px;
+                line-height: 30px;
+                display: inline-block;
+                text-align: center;
+                float: right;
+            }
+
+            cursor: pointer;
+            border-color: #999 transparent transparent;
+            border-style: solid;
+            border-width: 5px 5px 2.5px;
+            height: 0px;
+            width: 0px;
+            display: inline-block;
+
+            &:hover {
+                border-color: black transparent transparent;
+            }
+        }
+    }
+
+    &__outer {
+        height: 150px;
+        overflow-y: scroll;
+
+        &__option {
+            height: 30px;
+            padding: 5px;
+            text-transform: capitalize;
+
+            &:hover {
+                background: #e6f2ff;
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -12,3 +12,32 @@
         cursor: pointer;
     }
 }
+
+@mixin icon($content) {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: inherit;
+    width: 25px;
+    height: 30px;
+    position: relative;
+
+    &:before {
+        content: $content;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 20px;
+    }
+}
+
+@mixin noselect() {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}

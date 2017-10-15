@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 interface SelectProps {
     value?: string;
@@ -14,6 +15,7 @@ interface SelectState {
 export default class Select extends React.Component<SelectProps, SelectState> {
     private onOpenBound = this.onOpen.bind(this);
     private onClickBound = this.onClick.bind(this);
+    private onClickOutsideBound = this.onClickOutside.bind(this);
 
     constructor(props: SelectProps) {
         super(props);
@@ -22,6 +24,14 @@ export default class Select extends React.Component<SelectProps, SelectState> {
             value: props.value || '',
             open: false
         };
+    }
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.onClickOutsideBound);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.onClickOutsideBound);
     }
 
     render() {
@@ -75,6 +85,15 @@ export default class Select extends React.Component<SelectProps, SelectState> {
 
         if (this.props.onChange) {
             this.props.onChange(value);
+        }
+    }
+
+    private onClickOutside(e: any) {
+        e.preventDefault();
+
+        const area = ReactDOM.findDOMNode(this);
+        if (!area.contains(e.target)) {
+            this.setState({ open: false });
         }
     }
 }

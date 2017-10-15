@@ -1,0 +1,21 @@
+.border-properties {
+    width: 300px;
+    position: relative;
+    padding: 5px;
+
+    &__title {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .select {
+        margin-bottom: 10px;
+    }
+
+    .input-number-increment {
+    }
+
+    .color-picker {
+        float: right;
+    }
+}

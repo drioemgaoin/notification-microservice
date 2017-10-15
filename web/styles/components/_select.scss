@@ -1,6 +1,7 @@
 .select {
     border: 1px solid $border-color;
     border-radius: 4px;
+    position: relative;
 
     &__control {
         height: 30px;
@@ -45,6 +46,15 @@
     &__outer {
         height: 150px;
         overflow-y: scroll;
+        position: absolute;
+        top: 30px;
+        left: -1px;
+        width: 100%;
+        z-index: 1000;
+        background: #fff;
+        border-left: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        border-right: 1px solid $border-color;
 
         &__option {
             height: 30px;

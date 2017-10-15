@@ -32,11 +32,12 @@ export default class BorderProperties extends React.Component<BorderPropertiesPr
     render() {
         return (
             <div className='border-properties'>
-            {
-                this.props.moreOptions
-                    ? this.renderMoreOptions()
-                    : this.renderLessOptions()
-            }
+                <div className='border-properties__title'>Border</div>
+                {
+                    this.props.moreOptions
+                        ? this.renderMoreOptions()
+                        : this.renderLessOptions()
+                }
             </div>
         );
     }

@@ -38,9 +38,7 @@ class App extends React.Component<any, any> {
                         <Toolbox />
                     </Panel>
 
-                    <Ruler>
-                        <Renderer onClick={this.onClickBound}/>
-                    </Ruler>
+                    <Renderer onClick={this.onClickBound} />
                 </div>
                 <div className='App__footer'>
                 </div>

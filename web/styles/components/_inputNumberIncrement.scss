@@ -1,9 +1,9 @@
 $border-color: #ccc;
 
 .input-number-increment {
-    display: inline-block;
     border: 1px solid $border-color;
     border-radius: 4px;
+    display: inline-block;
 
     &__button {
         width: 30px;

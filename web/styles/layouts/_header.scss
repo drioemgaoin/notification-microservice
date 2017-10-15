@@ -2,8 +2,8 @@
     &__header {
         background: $header-background-color;
         color: $header-color;
-        height: 100px;
-        line-height: 100px;
+        height: $header-height;
+        line-height: $header-height;
         text-align: center;
     }
 }

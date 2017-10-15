@@ -5,8 +5,13 @@
 
     > li {
         padding: 5px 0px;
-        height: 40px;
-        line-height: 40px;
+        width: 90px;
+        height: 90px;
+        line-height: 90px;
+        border: 1px solid #fff;
+        text-align: center;
+        float: left;
+        margin: 3px;
 
         &:hover {
             cursor: pointer;

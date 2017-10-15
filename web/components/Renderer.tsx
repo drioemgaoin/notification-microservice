@@ -48,7 +48,7 @@ export default class Renderer extends React.Component<RendererProps, any> {
         return (
             this.props.connectDropTarget(
                 <div className='Renderer'>
-                    <BorderProperties />
+                    { this.state.components }
                 </div>
             )
         )

@@ -3,10 +3,11 @@ import * as bem from 'bem-classname';
 
 interface CheckboxProps {
     label?: string;
+    onChange: (checked: boolean) => void;
 }
 
 interface CheckboxState {
-    ticked: boolean;
+    checked: boolean;
 }
 
 export default class Checkbox extends React.Component<CheckboxProps, CheckboxState> {
@@ -16,14 +17,14 @@ export default class Checkbox extends React.Component<CheckboxProps, CheckboxSta
         super(props);
 
         this.state = {
-            ticked: false
+            checked: false
         };
     }
 
     render() {
-        const switchClassName = bem('checkbox__toggle__switch', { 'ticked': this.state.ticked });
-        const trackClassName = bem('checkbox__toggle__track', { 'ticked': this.state.ticked });
-        
+        const switchClassName = bem('checkbox__toggle__switch', { 'ticked': this.state.checked });
+        const trackClassName = bem('checkbox__toggle__track', { 'ticked': this.state.checked });
+
         return (
                 <div className='checkbox'>
                     {this.props.label && (<div className='checkbox__label'>{this.props.label}</div>)}
@@ -38,6 +39,11 @@ export default class Checkbox extends React.Component<CheckboxProps, CheckboxSta
     private onClick(e: React.SyntheticEvent<HTMLDivElement>) {
         e.preventDefault();
 
-        this.setState({ ticked: !this.state.ticked });
+        const checked = !this.state.checked;
+        this.setState({ checked });
+
+        if (this.props.onChange) {
+            this.props.onChange(checked);
+        }
     }
 }

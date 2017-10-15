@@ -4,13 +4,17 @@ import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } fr
 import * as PropTypes from 'prop-types';
 
 interface StructureProps extends StructureDndProps {
-    numberOfColumns?: number;
+    numberOfColumns: number;
     rendered?: boolean;
-    onClick: (component: any) => void;
+    onClick?: (callback: any) => void;
 }
 
-export interface StructureDndProps {
+interface StructureDndProps {
     connectDragSource?: any;
+}
+
+interface StructureState {
+    style: any;
 }
 
 const specSource: DragSourceSpec<StructureProps> = {
@@ -24,8 +28,15 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 });
 
 @DragSource('Component', specSource, collectSource)
-export default class Structure extends React.Component<any, any> {
+export default class Structure extends React.Component<StructureProps, StructureState> {
     private onClickBound = this.onClick.bind(this);
+    private onUpdateBound = (style: any) => this.onUpdate(style);
+
+    constructor(props: StructureProps) {
+        super(props);
+
+        this.state = { style: { border: { borderColor: 'blue' }} };
+    }
 
     render() {
         return this.props.rendered
@@ -42,7 +53,8 @@ export default class Structure extends React.Component<any, any> {
     private renderDragged() {
         return this.props.connectDragSource(
             <div className='structure structure--dragged'
-                onClick={this.onClickBound}>
+                onClick={this.onClickBound}
+                style={this.state.style}>
             {
                 times(this.props.numberOfColumns, () => {
                     return (
@@ -60,8 +72,12 @@ export default class Structure extends React.Component<any, any> {
         e.preventDefault();
 
         if (this.props.onClick) {
-            this.props.onClick(this);
+            this.props.onClick(this.onUpdateBound);
         }
+    }
+
+    private onUpdate(style: any) {
+        this.setState({ style });
     }
 }
 

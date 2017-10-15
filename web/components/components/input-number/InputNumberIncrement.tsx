@@ -28,6 +28,12 @@ export default class InputNumberIncrement extends React.Component<InputNumberInc
         );
     }
 
+    componentWillReceiveProps(nextProps: InputNumberIncrementProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({ value: nextProps.value });
+        }
+    }
+
     private onDecrement(e: React.SyntheticEvent<HTMLButtonElement>) {
         e.preventDefault();
 

@@ -34,6 +34,12 @@ export default class Select extends React.Component<SelectProps, SelectState> {
         document.removeEventListener('mousedown', this.onClickOutsideBound);
     }
 
+    componentWillReceiveProps(nextProps: SelectProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({ value: nextProps.value });
+        }
+    }
+
     render() {
         const options = this.props.options || [];
         const modifier = this.state.open ? ' select__control--opened' : '';

@@ -3,12 +3,13 @@ import * as ReactDOM from 'react-dom';
 import { SketchPicker } from 'react-color';
 
 interface ColorPickerProps {
-
+    value: string;
+    onChange?: (color: string) => void;
 }
 
 interface ColorPickerState {
     open: boolean;
-    color: string;
+    value: string;
 }
 
 export default class ColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
@@ -21,7 +22,7 @@ export default class ColorPicker extends React.Component<ColorPickerProps, Color
         super(props);
 
         this.state = {
-            color: 'transparent',
+            value: props.value || 'transparent',
             open: false
         };
     }
@@ -41,14 +42,14 @@ export default class ColorPicker extends React.Component<ColorPickerProps, Color
                     this.state.open ?
                     (
                         <SketchPicker ref={element => this.picker = element}
-                            color={this.state.color}
+                            color={this.state.value}
                             onChangeComplete={this.onChangeCompleteBound} />
                     ) : (
                         <div className='color-picker__control'>
                             <div className='color-picker__control__preview'
-                                style={{ background: this.state.color }}
+                                style={{ background: this.state.value }}
                                 onClick={this.onOpenBound} />
-                            <span className='color-picker__control__title'>{this.state.color}</span>
+                            <span className='color-picker__control__title'>{this.state.value}</span>
                         </div>
                     )
                 }
@@ -56,10 +57,20 @@ export default class ColorPicker extends React.Component<ColorPickerProps, Color
         );
     }
 
+    componentWillReceiveProps(nextProps: ColorPickerProps) {
+        if (nextProps.value !== this.props.value) {
+            this.setState({ value: nextProps.value });
+        }
+    }
+
     private onChangeComplete(color: any, e: any) {
         e.preventDefault();
 
-        this.setState({ color: color.hex });
+        this.setState({ value: color.hex });
+
+        if (this.props.onChange) {
+            this.props.onChange(color.hex);
+        }
     }
 
     private onOpen(e: React.SyntheticEvent<HTMLDivElement>) {

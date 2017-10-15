@@ -15,14 +15,24 @@
         }
     }
 
-    .select {
-        margin-bottom: 10px;
-    }
+    &__body {
+        &__container {
+            padding: 10px 0px;
 
-    .input-number-increment {
-    }
+            &__title {
+                padding: 5px 0px;
+            }
 
-    .color-picker {
-        float: right;
+            .select {
+                margin-bottom: 10px;
+            }
+
+            .input-number-increment {
+            }
+
+            .color-picker {
+                float: right;
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
     private onValidateBound = this.validate.bind(this);
     private onCancelBound = this.cancel.bind(this);
+    private onStyleChangeBound = this.onStyleChange.bind(this);
 
     constructor(props: any) {
         super(props);
@@ -36,7 +37,9 @@ class App extends React.Component<any, any> {
                         )
                     }
                     {
-                        this.state.openStylePanel && (<StylePanel />)
+                        this.state.openStylePanel && (
+                            <StylePanel onChange={this.onStyleChangeBound} />
+                        )
                     }
                     <Panel opened={true}>
                         <Toolbox />
@@ -50,10 +53,12 @@ class App extends React.Component<any, any> {
         );
     }
 
-    private onClick() {
-        // this.setState({ properties, callback });
+    private onClick(callback: any) {
+        this.setState({ openStylePanel: true, callback });
+    }
 
-        this.setState({ openStylePanel: true });
+    private onStyleChange(style: any) {
+        this.state.callback(style);
     }
 
     private cancel() {

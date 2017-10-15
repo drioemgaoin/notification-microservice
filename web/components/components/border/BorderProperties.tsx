@@ -3,6 +3,7 @@ import * as React from 'react';
 import Select from '../select/Select';
 import InputNumberIncrement from '../input-number/InputNumberIncrement';
 import ColorPicker from '../color-picker/ColorPicker';
+import Checkbox from '../checkbox/Checkbox';
 
 interface BorderPropertiesProps {
     moreOptions?: boolean,
@@ -32,7 +33,10 @@ export default class BorderProperties extends React.Component<BorderPropertiesPr
     render() {
         return (
             <div className='border-properties'>
-                <div className='border-properties__title'>Border</div>
+                <div className='border-properties__header'>
+                    <div>Border</div>
+                    <Checkbox label='More Options' />
+                </div>
                 {
                     this.props.moreOptions
                         ? this.renderMoreOptions()

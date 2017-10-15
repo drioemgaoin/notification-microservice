@@ -1,11 +1,18 @@
 .border-properties {
-    width: 300px;
     position: relative;
     padding: 5px;
 
-    &__title {
+    &__header {
         padding: 10px;
         font-size: 14px;
+
+        > div {
+            display: inline-block;
+        }
+
+        > div:last-child {
+            float: right;
+        }
     }
 
     .select {

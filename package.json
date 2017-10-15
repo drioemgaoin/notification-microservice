@@ -11,6 +11,7 @@
   "author": "Romain Diegoni",
   "license": "ISC",
   "dependencies": {
+    "bem-classname": "0.1.1",
     "cluster": "0.7.7",
     "debug": "3.0.1",
     "jsonschema": "1.2.0",

@@ -7,6 +7,7 @@ import Toolbox from './Toolbox';
 import Renderer from './Renderer';
 import Properties from './Properties';
 import Ruler from './Ruler';
+import StylePanel from './StylePanel';
 
 class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
@@ -16,7 +17,7 @@ class App extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
 
-        this.state = { properties: [] };
+        this.state = { properties: [], openStylePanel: false };
     }
 
     render() {
@@ -34,6 +35,9 @@ class App extends React.Component<any, any> {
                                         onCancel={this.onCancelBound} />
                         )
                     }
+                    {
+                        this.state.openStylePanel && (<StylePanel />)
+                    }
                     <Panel opened={true}>
                         <Toolbox />
                     </Panel>
@@ -46,8 +50,10 @@ class App extends React.Component<any, any> {
         );
     }
 
-    private onClick(properties: any, callback: any) {
-        this.setState({ properties, callback });
+    private onClick() {
+        // this.setState({ properties, callback });
+
+        this.setState({ openStylePanel: true });
     }
 
     private cancel() {

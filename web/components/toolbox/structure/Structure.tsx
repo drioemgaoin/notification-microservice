@@ -6,6 +6,7 @@ import * as PropTypes from 'prop-types';
 interface StructureProps extends StructureDndProps {
     numberOfColumns?: number;
     rendered?: boolean;
+    onClick: (component: any) => void;
 }
 
 export interface StructureDndProps {
@@ -24,6 +25,8 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 
 @DragSource('Component', specSource, collectSource)
 export default class Structure extends React.Component<any, any> {
+    private onClickBound = this.onClick.bind(this);
+
     render() {
         return this.props.rendered
             ? this.renderDragged()
@@ -38,7 +41,8 @@ export default class Structure extends React.Component<any, any> {
 
     private renderDragged() {
         return this.props.connectDragSource(
-            <div className='structure structure--dragged'>
+            <div className='structure structure--dragged'
+                onClick={this.onClickBound}>
             {
                 times(this.props.numberOfColumns, () => {
                     return (
@@ -50,6 +54,14 @@ export default class Structure extends React.Component<any, any> {
             }
             </div>
         );
+    }
+
+    private onClick(e: React.SyntheticEvent<HTMLDivElement>) {
+        e.preventDefault();
+
+        if (this.props.onClick) {
+            this.props.onClick(this);
+        }
     }
 }
 

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {assign} from 'lodash';
 
 import BorderProperties from './components/border/BorderProperties';
 
@@ -23,17 +22,17 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
     render() {
         return (
             <div className='style-panel'>
-                <BorderProperties onChange={this.onBorderChangeBound}/>
+                <BorderProperties onChange={this.onBorderChangeBound}
+                    border={this.state.style} />
             </div>
         );
     }
 
     private onBorderChange(border: any) {
-        const style = Object.assign({ ...this.state.style }, { ...border });
-        this.setState({ style });
+        this.setState({ style: border });
 
         if (this.props.onChange) {
-            this.props.onChange(style);
+            this.props.onChange(border);
         }
     }
 }

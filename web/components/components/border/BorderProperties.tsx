@@ -8,7 +8,18 @@ import Checkbox from '../checkbox/Checkbox';
 
 interface BorderPropertiesProps {
     moreOptions?: boolean,
-    border?: any;
+    borderStyle?: string,
+    borderWidth?: number,
+    borderColor?: string,
+    borderLeftStyle?: string,
+    borderLeftWidth?: number,
+    borderLeftColor?: string,
+    borderTopStyle?: string,
+    borderTopWidth?: number,
+    borderTopColor?: string,
+    borderBottomStyle?: string,
+    borderBottomWidth?: number,
+    borderBottomColor?: string,
     onChange?: (border: any) => void;
 }
 
@@ -102,6 +113,7 @@ export default class BorderProperties extends React.Component<BorderPropertiesPr
 
     private onOptionsChanged(checked: boolean) {
         let border = {};
+
         if (checked) {
             ['Left', 'Top', 'Right', 'Bottom'].map(key => {
                 border = assign(border, {
@@ -133,14 +145,10 @@ export default class BorderProperties extends React.Component<BorderPropertiesPr
         }
     }
 
-    private getValue(key: string) {
-        const borderKey = this.state.moreOptions ? 'borderDetailed' : 'border';
-        return this.state['border'][key];
-    }
-
     private getInitialValues(values: any, moreOptions: boolean) {
-        let border = BorderProperties.DefaultBorder;
         if (moreOptions) {
+            let border = {};
+
             ['Left', 'Top', 'Right', 'Bottom'].map(key => {
                 border = assign(border, {
                     ['border' + key + 'Style']: values['border' + key + 'Style'] ? values['border' + key + 'Style'] : values.borderStyle,
@@ -148,8 +156,10 @@ export default class BorderProperties extends React.Component<BorderPropertiesPr
                     ['border' + key + 'Color']: values['border' + key + 'Color'] ? values['border' + key + 'Color'] : values.borderColor
                 });
             });
+
+            return border;
         }
 
-        return border;
+        return BorderProperties.DefaultBorder;
     }
 }

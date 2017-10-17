@@ -1,0 +1,30 @@
+.padding-properties {
+    position: relative;
+    padding: 5px;
+
+    &__header {
+        padding: 10px;
+        font-size: 14px;
+
+        > div {
+            display: inline-block;
+        }
+
+        > div:last-child {
+            float: right;
+        }
+    }
+
+    &__body {
+        &__container {
+            padding: 10px 0px;
+            display: inline-block;
+            width: 50%;
+
+            &__title {
+                text-align: left;
+                padding: 5px 0px;
+            }
+        }
+    }
+}

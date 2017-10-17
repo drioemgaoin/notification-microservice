@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {times} from 'lodash';
+import {assign, times} from 'lodash';
 import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import * as PropTypes from 'prop-types';
 
@@ -53,12 +53,17 @@ export default class Structure extends React.Component<StructureProps, Structure
     private renderDragged() {
         return this.props.connectDragSource(
             <div className='structure structure--dragged'
-                onClick={this.onClickBound}
-                style={this.state.style}>
+                onClick={this.onClickBound}>
             {
-                times(this.props.numberOfColumns, () => {
+                times(this.props.numberOfColumns, (index: number) => {
+                    const style = assign(
+                        {},
+                        {...this.state.style},
+                        { width: 'calc(100% / ' + this.props.numberOfColumns + ')' }
+                    );
                     return (
-                        <div style={{ width: 'calc(100% / ' + this.props.numberOfColumns + ')' }}>
+                        <div key={'structure-' + index}
+                            className='structure__container' style={style}>
                             <span>No content here. Drag component from the toolbox.</span>
                         </div>
                     );

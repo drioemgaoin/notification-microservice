@@ -12,6 +12,7 @@ $border-color: #ccc;
         border: none;
         cursor: pointer;
         outline: none;
+        display: inline-block;
 
         &--decrement {
             border-right: none;
@@ -22,11 +23,13 @@ $border-color: #ccc;
         }
     }
 
-    input {
-        border: none;
-        padding: 0;
-        height: 28px;
+    div {
+        display: inline-block;
+        vertical-align: top;
+        height: 30px;
+        line-height: 30px;
         width: 30px;
         text-align: center;
+        color: #7F7F7F;
     }
 }

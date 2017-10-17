@@ -102,5 +102,5 @@ export default class List extends React.Component<ListProps, any> {
 }
 
 (List as any).propTypes = {
-    items: PropTypes.arrayOf(PropTypes.string).isRequired
+    items: PropTypes.arrayOf(PropTypes.string)
 };

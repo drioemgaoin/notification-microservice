@@ -14,6 +14,7 @@ class App extends React.Component<any, any> {
     private onValidateBound = this.validate.bind(this);
     private onCancelBound = this.cancel.bind(this);
     private onStyleChangeBound = this.onStyleChange.bind(this);
+    private onStyleCloseBound = this.onStyleClose.bind(this);
 
     constructor(props: any) {
         super(props);
@@ -37,8 +38,10 @@ class App extends React.Component<any, any> {
                         )
                     }
                     {
-                        this.state.openStylePanel && (
-                            <StylePanel onChange={this.onStyleChangeBound} />
+                        this.state.openStylePanel &&
+                        (
+                            <StylePanel onChange={this.onStyleChangeBound}
+                                onClose={this.onStyleCloseBound} />
                         )
                     }
                     <Panel opened={true}>
@@ -63,6 +66,10 @@ class App extends React.Component<any, any> {
 
     private cancel() {
         this.setState({ properties: [] });
+    }
+
+    private onStyleClose() {
+        this.setState({ openStylePanel: false });
     }
 
     private validate(values: any) {

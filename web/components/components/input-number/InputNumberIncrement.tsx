@@ -22,7 +22,7 @@ export default class InputNumberIncrement extends React.Component<InputNumberInc
         return (
             <div className='input-number-increment'>
                 <button className='input-number-increment input-number-increment__button input-number-increment__button--decrement' onClick={this.onDecrementBound}>-</button>
-                <input type='input' value ={this.state.value} />
+                <div>{this.state.value}</div>
                 <button className='input-number-increment input-number-increment__button input-number-increment__button--increment' onClick={this.onIncrementBound}>+</button>
             </div>
         );

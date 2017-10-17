@@ -1,3 +1,33 @@
 .style-panel {
+    position: absolute;
+    z-index: 1000;
     width: $panel-size;
+    height: 100%;
+    background: #fff;
+
+    &__header {
+        height: 40px;
+        line-height: 40px;
+        padding: 0px 0px 0px 10px;
+        border-bottom: 1px solid #E6E6E6;
+        text-transform: uppercase;
+
+        &__title {
+            display: inline-block;
+        }
+
+        &__close {
+            @include icon('\f078');
+            float: right;
+            height: inherit;
+            width: 40px;
+            border-left: 1px solid #E6E6E6;
+            cursor: pointer;
+        }
+    }
+
+    &__body {
+        height: calc(100% - 50px);
+        padding: 5px 10px;
+    }
 }

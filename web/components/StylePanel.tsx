@@ -6,6 +6,7 @@ import BorderProperties from './components/border/BorderProperties';
 
 interface StylePanelProps {
     onChange: (style: any) => void;
+    onClose?: any;
 }
 
 interface StylePanelState {
@@ -29,10 +30,15 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
     render() {
         return (
             <div className='style-panel'>
-                <PaddingProperties onChange={this.onPaddingChangeBound}
-                     />
-                <BorderProperties onChange={this.onBorderChangeBound}
-                     />
+                <div className='style-panel__header'>
+                    <div className='style-panel__header__title'>Row Properties</div>
+                    <span className='style-panel__header__close'
+                        onClick={this.props.onClose}></span>
+                </div>
+                <div className='style-panel__body'>
+                    <PaddingProperties onChange={this.onPaddingChangeBound} />
+                    <BorderProperties onChange={this.onBorderChangeBound} />
+                </div>
             </div>
         );
     }

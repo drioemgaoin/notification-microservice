@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {assign} from 'lodash';
 
+import BackgroundProperties from './components/background/BackgroundProperties';
 import PaddingProperties from './components/padding/PaddingProperties';
 import BorderProperties from './components/border/BorderProperties';
 
@@ -10,11 +11,13 @@ interface StylePanelProps {
 }
 
 interface StylePanelState {
+    background: string;
     border: any;
     padding: any;
 }
 
 export default class StylePanel extends React.Component<StylePanelProps, StylePanelState> {
+    private onBackgroundChangeBound = this.onBackgroundChange.bind(this);
     private onPaddingChangeBound = this.onPaddingChange.bind(this);
     private onBorderChangeBound = this.onBorderChange.bind(this);
 
@@ -22,6 +25,7 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
         super(props);
 
         this.state = {
+            background: 'transparent',
             padding: {},
             border: {}
         };
@@ -36,6 +40,7 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
                         onClick={this.props.onClose}></span>
                 </div>
                 <div className='style-panel__body'>
+                    <BackgroundProperties onChange={this.onBackgroundChangeBound} />
                     <PaddingProperties onChange={this.onPaddingChangeBound} />
                     <BorderProperties onChange={this.onBorderChangeBound} />
                 </div>
@@ -47,7 +52,7 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
         this.setState({ border });
 
         if (this.props.onChange) {
-            this.props.onChange(assign({}, { ...this.state.padding }, { ...border }));
+            this.props.onChange(assign({ background: this.state.background }, { ...this.state.padding }, { ...border }));
         }
     }
 
@@ -55,7 +60,15 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
         this.setState({ padding });
 
         if (this.props.onChange) {
-            this.props.onChange(assign({}, { ...this.state.border }, { ...padding }));
+            this.props.onChange(assign({ background: this.state.background }, { ...this.state.border }, { ...padding }));
+        }
+    }
+
+    private onBackgroundChange(background: string) {
+        this.setState({ background });
+
+        if (this.props.onChange) {
+            this.props.onChange(assign({ background }, { ...this.state.border }, { ...this.state.padding }));
         }
     }
 }

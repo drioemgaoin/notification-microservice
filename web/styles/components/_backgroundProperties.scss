@@ -1,0 +1,17 @@
+.background-properties {
+    position: relative;
+    padding: 10px 5px;
+    height: 30px;
+    line-height: 30px;
+
+    &__title {
+        position: absolute;
+        left: 5px;
+    }
+
+    > .color-picker {
+        position: absolute;
+        right: 5px;
+        z-index: 1500;
+    }
+}

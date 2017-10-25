@@ -1,8 +1,5 @@
 .Renderer {
-    position: absolute;
-    top: $header-height;
-    left: $panel-size;
-    width: calc(100% - #{$panel-size});
+    flex-grow: 1;
     height: 100%;
     padding: 1px;
 }

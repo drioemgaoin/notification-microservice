@@ -1,8 +1,5 @@
 .Panel {
-    vertical-align: top;
-    display: inline-block;
-    width: $panel-size;
+    float: left;
+    max-width: $panel-size;
     height: 100%;
-    background: $panel-background-color;
-    color: $panel-color;
 }

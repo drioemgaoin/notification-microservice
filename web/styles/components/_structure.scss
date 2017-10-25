@@ -8,9 +8,8 @@
     }
 
     &__container {
-        position:absolute;
-        left:0;
-        right:0;
+        display: inline-block;
+        min-height: 70px;
         box-sizing:border-box;
         outline: #2FAADE dashed 1px;
         background: rgba(222,242,250,.85);

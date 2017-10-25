@@ -8,15 +8,27 @@ import Structure from './toolbox/structure/Structure';
 export default class Toolbox extends React.Component<any, any> {
     render() {
         return (
-            <ol className='Toolbox'>
-                <li><Date /></li>
-                <li><List /></li>
-                <li><Text /></li>
-                <li><Structure numberOfColumns={1} /></li>
-                <li><Structure numberOfColumns={2} /></li>
-                <li><Structure numberOfColumns={3} /></li>
-                <li><Structure numberOfColumns={4} /></li>
-            </ol>
+            <div className='Toolbox'>
+                <ol>
+                    {
+                        this.props.category === 'content' ?
+                        (
+                            [
+                                <li><Date /></li>,
+                                <li><List /></li>,
+                                <li><Text /></li>
+                            ]
+                        ) : (
+                            [
+                                <li><Structure numberOfColumns={1} /></li>,
+                                <li><Structure numberOfColumns={2} /></li>,
+                                <li><Structure numberOfColumns={3} /></li>,
+                                <li><Structure numberOfColumns={4} /></li>
+                            ]
+                        )
+                    }
+                </ol>
+            </div>
         );
     }
 }

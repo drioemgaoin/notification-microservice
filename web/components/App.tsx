@@ -8,6 +8,7 @@ import Renderer from './Renderer';
 import Properties from './Properties';
 import Ruler from './Ruler';
 import StylePanel from './StylePanel';
+import Toolbar from './Toolbar';
 
 class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
@@ -15,11 +16,15 @@ class App extends React.Component<any, any> {
     private onCancelBound = this.cancel.bind(this);
     private onStyleChangeBound = this.onStyleChange.bind(this);
     private onStyleCloseBound = this.onStyleClose.bind(this);
+    private onMenuChangeBound = this.onMenuChange.bind(this);
 
     constructor(props: any) {
         super(props);
 
-        this.state = { properties: [], openStylePanel: false };
+        this.state = {
+            properties: [],
+            openStylePanel: false
+        };
     }
 
     render() {
@@ -45,9 +50,9 @@ class App extends React.Component<any, any> {
                         )
                     }
                     <Panel opened={true}>
-                        <Toolbox />
+                        <Toolbar onChange={this.onMenuChangeBound} />
+                        {this.state.panel && (<Toolbox category={this.state.panel} />)}
                     </Panel>
-
                     <Renderer onClick={this.onClickBound} />
                 </div>
                 <div className='App__footer'>
@@ -75,6 +80,10 @@ class App extends React.Component<any, any> {
     private validate(values: any) {
         this.setState({ properties: [] });
         this.state.callback(values);
+    }
+
+    private onMenuChange(item: string) {
+        this.setState({ panel: item });
     }
 }
 

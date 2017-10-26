@@ -16,8 +16,6 @@ const specTarget: DropTargetSpec<RendererProps> = {
     drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
-            console.log(Components)
-            console.log((Components as any)[item.name])
             const components = component.state.components.concat([
                 React.createElement(
                     (Components as any)[item.name],

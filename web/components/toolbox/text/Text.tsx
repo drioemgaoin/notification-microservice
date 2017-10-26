@@ -27,18 +27,7 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
     connectDragSource: connect.dragSource()
 });
 
-const specTarget: DropTargetSpec<TextProps> = {
-    hover(props: TextProps, monitor: DropTargetMonitor, component: React.Component<any, any>) {
-
-    }
-}
-
-const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
-    connectDropTarget: connect.dropTarget()
-});
-
-@DragSource('Component', specSource, collectSource)
-@DropTarget('Component', specTarget, collectTarget)
+@DragSource('Element', specSource, collectSource)
 export default class Text extends React.Component<TextProps, any> {
     private onClickBound = this.onClick.bind(this);
     private onCallbackBound = this.onCallback.bind(this);
@@ -69,11 +58,9 @@ export default class Text extends React.Component<TextProps, any> {
 
     private renderDragged() {
         return this.props.connectDragSource(
-            this.props.connectDropTarget(
-                <div className='text text--dragged' onClick={this.onClickBound}>
-                {this.state.value}
-                </div>
-            )
+            <div className='text text--dragged' onClick={this.onClickBound}>
+            {this.state.value}
+            </div>
         );
     }
 

@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import {assign} from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 
-import Components from './toolbox/index';
+import Components from './toolbox/structureComponent';
 import BorderProperties from './components/border/BorderProperties';
 
 export interface RendererProps {
@@ -16,7 +16,9 @@ const specTarget: DropTargetSpec<RendererProps> = {
     drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
-            const components = component.state.components.concat(
+            console.log(Components)
+            console.log((Components as any)[item.name])
+            const components = component.state.components.concat([
                 React.createElement(
                     (Components as any)[item.name],
                     {
@@ -25,8 +27,8 @@ const specTarget: DropTargetSpec<RendererProps> = {
                         onClick: component.props.onClick,
                         ...assign({}, item.properties)
                     })
-            );
-
+            ]);
+            
             component.setState({ components });
         }
     }
@@ -36,7 +38,7 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
     connectDropTarget: connect.dropTarget()
 });
 
-@DropTarget('Component', specTarget, collectTarget)
+@DropTarget('Grid', specTarget, collectTarget)
 export default class Renderer extends React.Component<RendererProps, any> {
     constructor(props: RendererProps) {
         super(props);

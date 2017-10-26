@@ -12,7 +12,6 @@ interface ListProps extends ListDndProps {
 
 export interface ListDndProps {
     connectDragSource?: any;
-    connectDropTarget?: any;
 }
 
 const specSource: DragSourceSpec<ListProps> = {
@@ -25,18 +24,7 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
     connectDragSource: connect.dragSource()
 });
 
-const specTarget: DropTargetSpec<ListProps> = {
-    hover(props: ListProps, monitor: DropTargetMonitor, component: React.Component<any, any>) {
-
-    }
-}
-
-const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
-    connectDropTarget: connect.dropTarget()
-});
-
-@DragSource('Component', specSource, collectSource)
-@DropTarget('Component', specTarget, collectTarget)
+@DragSource('Element', specSource, collectSource)
 export default class List extends React.Component<ListProps, any> {
     private onClickBound = this.onClick.bind(this);
     private onCallbackBound = this.onCallback.bind(this);
@@ -67,24 +55,22 @@ export default class List extends React.Component<ListProps, any> {
 
     private renderDragged() {
         return this.props.connectDragSource(
-            this.props.connectDropTarget(
-                <div className='list list--dragged' onClick={this.onClickBound}>
-                {
-                    this.state.items.length > 0
-                    ? (
-                        <ul className='list' onClick={this.onClickBound}>
-                        {
-                            this.state.items.map((item: any) => {
-                                return <li>{item}</li>;
-                            })
-                        }
-                        </ul>
-                    ) : (
-                        <div className='list' onClick={this.onClickBound}>Empty List</div>
-                    )
-                }
-                </div>
-            )
+            <div className='list list--dragged' onClick={this.onClickBound}>
+            {
+                this.state.items.length > 0
+                ? (
+                    <ul className='list' onClick={this.onClickBound}>
+                    {
+                        this.state.items.map((item: any) => {
+                            return <li>{item}</li>;
+                        })
+                    }
+                    </ul>
+                ) : (
+                    <div className='list' onClick={this.onClickBound}>Empty List</div>
+                )
+            }
+            </div>
         );
     }
 

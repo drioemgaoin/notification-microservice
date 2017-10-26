@@ -28,18 +28,7 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
     connectDragSource: connect.dragSource()
 });
 
-const specTarget: DropTargetSpec<DateProps> = {
-    hover(props: DateProps, monitor: DropTargetMonitor, component: React.Component<any, any>) {
-
-    }
-}
-
-const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
-    connectDropTarget: connect.dropTarget()
-});
-
-@DragSource('Component', specSource, collectSource)
-@DropTarget('Component', specTarget, collectTarget)
+@DragSource('Element', specSource, collectSource)
 export default class Date extends React.Component<DateProps, any> {
     private onClickBound = this.onClick.bind(this);
     private onCallbackBound = this.onCallback.bind(this);
@@ -72,11 +61,9 @@ export default class Date extends React.Component<DateProps, any> {
 
     private renderDragged() {
         return this.props.connectDragSource(
-            this.props.connectDropTarget(
-                <div className='date date--dragged' onClick={this.onClickBound}>
-                {moment(this.state.value).format(this.state.format)}
-                </div>
-            )
+            <div className='date date--dragged' onClick={this.onClickBound}>
+            {moment(this.state.value).format(this.state.format)}
+            </div>
         );
     }
 

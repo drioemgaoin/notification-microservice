@@ -8,6 +8,7 @@ import Components from '../../toolbox/contentComponent';
 interface ContainerProps extends StructureDndProps {
     className?: string;
     style: any;
+    onClick?: (callback: any) => void;
 }
 
 interface StructureDndProps {
@@ -42,7 +43,10 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
 
 @DropTarget('Element', specTarget, collectTarget)
 export default class Container extends React.Component<ContainerProps, ContainerState> {
-     constructor(props: ContainerProps) {
+    private onClickBound = this.onClick.bind(this);
+    private onUpdateBound = (style: any) => this.onUpdate(style);
+
+    constructor(props: ContainerProps) {
         super(props);
 
         this.state = { style: props.style };
@@ -54,7 +58,9 @@ export default class Container extends React.Component<ContainerProps, Container
     render() {
         const className = classNames('container', this.props.className);
         return this.props.connectDropTarget(
-            <div className={this.props.className} style={this.state.style}>
+            <div className={this.props.className} 
+                style={this.state.style}
+                onClick={this.onClickBound}>
                 {
                     this.state.component 
                     ? this.state.component
@@ -63,5 +69,17 @@ export default class Container extends React.Component<ContainerProps, Container
                 
             </div>
         );
+    }
+
+    private onClick(e: React.SyntheticEvent<HTMLDivElement>) {
+        e.preventDefault();
+
+        if (this.props.onClick) {
+            this.props.onClick(this.onUpdateBound);
+        }
+    }
+
+    private onUpdate(style: any) {
+        this.setState({ style: assign({ ...this.state.style }, { ...style }) });
     }
 }

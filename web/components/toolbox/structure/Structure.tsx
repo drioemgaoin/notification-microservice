@@ -31,9 +31,6 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 
 @DragSource('Grid', specSource, collectSource)
 export default class Structure extends React.Component<StructureProps, StructureState> {
-    private onClickBound = this.onClick.bind(this);
-    private onUpdateBound = (style: any) => this.onUpdate(style);
-
     constructor(props: StructureProps) {
         super(props);
 
@@ -54,8 +51,7 @@ export default class Structure extends React.Component<StructureProps, Structure
 
     private renderDragged() {
         return (
-            <div className='structure structure--dragged'
-                onClick={this.onClickBound}>
+            <div className='structure structure--dragged'>
             {
                 times(this.props.numberOfColumns, (index: number) => {
                     const style = assign(
@@ -64,24 +60,13 @@ export default class Structure extends React.Component<StructureProps, Structure
                         { width: 'calc(100% / ' + this.props.numberOfColumns + ')' }
                     );
                     return (
-                        <Container className='structure__container' style={style} />
+                        <Container className='structure__container' style={style}
+                            onClick={this.props.onClick} />
                     );
                 })
             }
             </div>
         );
-    }
-
-    private onClick(e: React.SyntheticEvent<HTMLDivElement>) {
-        e.preventDefault();
-
-        if (this.props.onClick) {
-            this.props.onClick(this.onUpdateBound);
-        }
-    }
-
-    private onUpdate(style: any) {
-        this.setState({ style });
     }
 }
 

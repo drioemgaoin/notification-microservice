@@ -61,12 +61,18 @@ class App extends React.Component<any, any> {
         );
     }
 
-    private onClick(callback: any) {
-        this.setState({ openStylePanel: true, callback });
+    private onClick(component: any) {
+        if (this.state.current && this.state.current !== component) {
+            this.state.current.unselect();
+        }
+
+        this.setState({ openStylePanel: true, current: component });
     }
 
     private onStyleChange(style: any) {
-        this.state.callback(style);
+        if (this.state.current) {
+            this.state.current.update(style);
+        }
     }
 
     private cancel() {

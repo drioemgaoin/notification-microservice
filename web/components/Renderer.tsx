@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import {assign} from 'lodash';
+import { assign, filter } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 
 import Components from './toolbox/structureComponent';
@@ -21,10 +21,13 @@ const specTarget: DropTargetSpec<RendererProps> = {
                     (Components as any)[item.name],
                     {
                         key: 'component-' + (component.state.components.length + 1),
+                        id: 'component-' + (component.state.components.length + 1),
                         rendered: true,
                         onClick: component.props.onClick,
+                        onRemove: (component as any).remove.bind(component),
                         ...assign({}, item.properties)
-                    })
+                    }
+                )
             ]);
             
             component.setState({ components });
@@ -52,6 +55,10 @@ export default class Renderer extends React.Component<RendererProps, any> {
                 </div>
             )
         )
+    }
+
+    remove(component: any) {
+        this.setState({ components: filter(this.state.components, (x: any) => x.key !== component.props.id) });
     }
 }
 

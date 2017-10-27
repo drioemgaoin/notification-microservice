@@ -1,0 +1,37 @@
+.container {
+    display: inline-block;
+    vertical-align: top;
+    min-height: inherit;
+    height: 100%;
+    box-sizing:border-box;
+    outline: #2FAADE dashed 1px;
+    background: rgba(222,242,250,.85);
+    outline-offset: -1px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+
+    > span {
+        color: #2FAADE;
+        line-height: 50px;
+    }
+
+    // &--selected {
+    //     outline: #0473A3 solid 2px;
+    //     z-index: 500;
+    // }
+
+    // &__toolbar {
+    //     float: right;
+    //     height: inherit;
+    //     background: #2FAADE;
+
+    //     &__cross {
+    //         @include icon('\f00d');
+    //         float: right;
+    //         color: #fff;
+    //         border: 1px solid #0473A3;
+    //     }
+    // }
+    
+}

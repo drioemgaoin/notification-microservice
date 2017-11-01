@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PubSub from 'pubsub-js';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
@@ -53,7 +54,7 @@ class App extends React.Component<any, any> {
                         <Toolbar onChange={this.onMenuChangeBound} />
                         {this.state.panel && (<Toolbox category={this.state.panel} />)}
                     </Panel>
-                    <Renderer onClick={this.onClickBound} />
+                    <Renderer ref='renderer' onClick={this.onClickBound} />
                 </div>
                 <div className='App__footer'>
                 </div>
@@ -62,11 +63,7 @@ class App extends React.Component<any, any> {
     }
 
     private onClick(component: any) {
-        if (this.state.current && this.state.current !== component) {
-            this.state.current.unselect();
-        }
-
-        this.setState({ openStylePanel: true, current: component });
+        PubSub.publish('COMPONENT_SELECTED', component.props.id);
     }
 
     private onStyleChange(style: any) {

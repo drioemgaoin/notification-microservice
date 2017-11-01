@@ -6,6 +6,7 @@ import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } fr
 import Components from '../../toolbox/contentComponent';
 
 interface ContainerProps extends StructureDndProps {
+    id?: string;
     className?: string;
     style: any;
     onClick?: (component: any) => void;
@@ -24,12 +25,15 @@ const specTarget: DropTargetSpec<ContainerProps> = {
     drop(props: ContainerProps, monitor: DropTargetMonitor, component: React.Component<ContainerProps, ContainerState>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
+            const id = component.props.id + '-1';
             const element = React.createElement(
                     (Components as any)[item.name],
                     {
-                        key: 'component',
+                        key: id,
+                        id,
                         rendered: true,
-                        ...assign({}, item.properties)
+                        ...assign({}, item.properties),
+                        onClick: component.props.onClick
                     });
 
             component.setState({ component: element });
@@ -48,7 +52,7 @@ export default class Container extends React.Component<ContainerProps, Container
     constructor(props: ContainerProps) {
         super(props);
 
-        this.state = { 
+        this.state = {
             style: props.style
         };
     }
@@ -56,11 +60,11 @@ export default class Container extends React.Component<ContainerProps, Container
     render() {
         const className = classNames('container', this.props.className);
         return this.props.connectDropTarget(
-            <div className={className} 
+            <div className={className}
                 style={this.state.style}
                 onClick={this.onClickBound}>
                 {
-                    this.state.component 
+                    this.state.component
                     ? this.state.component
                     : ( <span>No content here. Drag component from the toolbox.</span> )
                 }
@@ -70,12 +74,6 @@ export default class Container extends React.Component<ContainerProps, Container
 
     public update(style: any) {
         this.setState({ style: assign({ ...this.state.style }, { ...style }) });
-    }
-
-    public unselect() {
-        if (this.props.onClick) {
-            this.props.onClick(this);
-        }
     }
 
     private onClick(e: React.SyntheticEvent<HTMLDivElement>) {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { assign, filter } from 'lodash';
+import { forEach, assign, filter } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 
 import Components from './toolbox/structureComponent';
@@ -16,20 +16,22 @@ const specTarget: DropTargetSpec<RendererProps> = {
     drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
+            const id = 'component-' + (component.state.components.length + 1);
             const components = component.state.components.concat([
                 React.createElement(
                     (Components as any)[item.name],
                     {
-                        key: 'component-' + (component.state.components.length + 1),
-                        id: 'component-' + (component.state.components.length + 1),
+                        key: id,
+                        id,
                         rendered: true,
+                        selected: false,
                         onClick: component.props.onClick,
                         onRemove: (component as any).remove.bind(component),
                         ...assign({}, item.properties)
                     }
                 )
             ]);
-            
+
             component.setState({ components });
         }
     }

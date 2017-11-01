@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as PubSub from 'pubsub-js';
 import * as bem from 'bem-classname';
 import {assign, times} from 'lodash';
 import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
@@ -37,11 +38,12 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 export default class Structure extends React.Component<StructureProps, StructureState> {
     private onClickBound = this.onClick.bind(this);
     private onRemoveBound = this.onRemove.bind(this);
+    private token: any;
 
     constructor(props: StructureProps) {
         super(props);
 
-        this.state = { 
+        this.state = {
             style: { border: { borderColor: 'blue' }},
             selected: false
         };
@@ -51,6 +53,18 @@ export default class Structure extends React.Component<StructureProps, Structure
         return this.props.rendered
             ? this.renderDragged()
             : this.renderDraggable();
+    }
+
+    componentWillMount(){
+        this.token = PubSub.subscribe('COMPONENT_SELECTED', this.select.bind(this));
+    }
+
+    componentWillUnmount(){
+        PubSub.unsubscribe(this.token);
+    }
+
+    select(msg: string, id: any) {
+        this.setState({ selected: this.props.id === id ? !this.state.selected : false });
     }
 
     private renderDraggable() {
@@ -79,8 +93,9 @@ export default class Structure extends React.Component<StructureProps, Structure
                         );
                         return (
                             <Container key={'container-' + index}
-                                className='structure__container' 
-                                style={style} 
+                                id={this.props.id}
+                                className='structure__container'
+                                style={style}
                                 onClick={this.onClickBound} />
                         );
                     })
@@ -90,8 +105,6 @@ export default class Structure extends React.Component<StructureProps, Structure
     }
 
     private onClick(component: any) {
-        this.setState({ selected: !this.state.selected });
-
         if (this.props.onClick) {
             this.props.onClick(component);
         }
@@ -103,5 +116,5 @@ export default class Structure extends React.Component<StructureProps, Structure
         if (this.props.onRemove) {
             this.props.onRemove(this);
         }
-    }    
+    }
 }

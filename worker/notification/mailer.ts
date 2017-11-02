@@ -1,6 +1,8 @@
 import * as Mailer from 'nodemailer';
 
-const send = (mailOptions: any) => {
+import { IMailOptions } from './model';
+
+const send = (mailOptions: IMailOptions, done: any) => {
     const transporter = Mailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -17,6 +19,7 @@ const send = (mailOptions: any) => {
         }
 
         console.log('Message sent: %s', info.messageId);
+        done();
     });
 };
 

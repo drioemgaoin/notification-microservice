@@ -5,13 +5,15 @@ import * as Router from "koa-router";
 import * as Body from "koa-body";
 import * as Http from "http";
 
+require('dotenv').load();
+
 import * as mailer from "./mailer";
 import * as builder from "./builder";
+import * as db from "./db";
+import * as tracker from "./service/tracker";
 
 const app: Koa = new Koa();
 const router: Router = new Router();
-
-require('dotenv').load();
 
 app.use(logger());
 app.use(bodyParser());
@@ -26,9 +28,20 @@ router.get('/notification/:key', (ctx, next) => {
 });
 
 router.post('/notification/:key', (ctx, next) => {
-    const options = builder.build(ctx.request.body);
-    mailer.send(options);
+    db.connect(() => {
+        const options = builder.build(ctx.request.body);
+        tracker.save(options, (document_id: string) => {
+            mailer.send(options, () => {
+                tracker.remove(document_id);
+            });
+        });
+    });
 });
+
+const disconnect = () => db.disconnect();
+process.on('exit', disconnect);
+process.on('SIGTERM', disconnect);
+process.on('SIGINT', disconnect);
 
 console.log("Notification Backend started listening on port 3001...");
 app.listen(3001);

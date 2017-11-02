@@ -1,9 +1,10 @@
 import * as db from "../db";
-import * as Model from "../model/notification";
 import * as Promise from 'bluebird';
-import { assign } from 'lodash';
+import { assign, forEach } from 'lodash';
 
-const save = (mailOptions: any): any => {
+import * as Model from "../model/notification";
+
+const save = (mailOptions: any) => {
     const model = assign({}, mailOptions, { sent: false });
     const notification = new Model.Notification(model);
     return db.connect().then(() => notification.save());
@@ -12,15 +13,21 @@ const save = (mailOptions: any): any => {
 const update = (id: string) => {
     return db.connect()
         .then(() => {
-            return Model.Notification.findOne({ _id: db.getId(id)})
+            return Model.Notification.findOne({ _id: db.ObjectId(id)})
                 .then((notification: any) => {
                     notification.sent = true;
-                    return notification.save()
+                    return notification.save();
                 });
         });
 };
 
+const recover = () => {
+    return db.connect()
+        .then(() => Model.Notification.find({ sent: false }).exec());
+};
+
 export {
     save,
-    update
+    update,
+    recover
 };

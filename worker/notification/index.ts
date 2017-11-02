@@ -4,6 +4,7 @@ import * as logger from "koa-logger";
 import * as Router from "koa-router";
 import * as Body from "koa-body";
 import * as Http from "http";
+import { forEach } from "lodash";
 
 require('dotenv').load();
 
@@ -28,7 +29,7 @@ router.get('/notification/:key', (ctx, next) => {
 });
 
 router.post('/notification/:key', (ctx, next) => {
-    const notification = builder.build(ctx.request.body);
+    const notification = builder.converFromRequest(ctx.request.body);
 
     let id: string;
     tracker.save(notification)
@@ -47,5 +48,14 @@ process.on('exit', disconnect);
 process.on('SIGTERM', disconnect);
 process.on('SIGINT', disconnect);
 
-console.log("Notification Backend started listening on port 3001...");
-app.listen(3001);
+app.listen(3001, "127.0.0.1", () => {
+    console.log("Notification Backend started listening on port 3001...");
+
+    tracker.recover()
+        .then((documents: any) => {
+            forEach(documents, (document: any) => {
+                const notification = builder.converFromDocument(document);
+                mailer.send(notification).then(() => tracker.update(document.id));
+            });
+        });
+});

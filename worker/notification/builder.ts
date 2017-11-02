@@ -1,6 +1,6 @@
 import { IMailOptions } from './model';
 
-const build = (body: any): IMailOptions => {
+const converFromRequest = (body: any): IMailOptions => {
     return {
         from: body.from,
         to: body.to,
@@ -10,6 +10,17 @@ const build = (body: any): IMailOptions => {
     };
 };
 
+const converFromDocument = (document: any): IMailOptions => {
+    return {
+        from: document.from,
+        to: document.to,
+        subject: document.subject,
+        text: document.text,
+        html: document.html
+    };
+};
+
 export {
-    build
+    converFromRequest,
+    converFromDocument
 }

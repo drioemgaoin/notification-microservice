@@ -20,7 +20,7 @@ const connect = () => {
     });
 }
 
-const getId = (id: string) => {
+const ObjectId = (id: string) => {
     return mongoose.Types.ObjectId(id);
 };
 
@@ -40,5 +40,5 @@ const disconnect = () => {
 export {
     connect,
     disconnect,
-    getId
+    ObjectId
 };

@@ -28,14 +28,18 @@ router.get('/notification/:key', (ctx, next) => {
 });
 
 router.post('/notification/:key', (ctx, next) => {
-    db.connect(() => {
-        const options = builder.build(ctx.request.body);
-        tracker.save(options, (document_id: string) => {
-            mailer.send(options, () => {
-                tracker.remove(document_id);
-            });
+    const notification = builder.build(ctx.request.body);
+
+    let id: string;
+    tracker.save(notification)
+        .then((document: any) => {
+            id = document.id;
+            return mailer.send(notification);
+        })
+        .then(() => tracker.update(id))
+        .catch((error: any) => {
+            console.log(error);
         });
-    });
 });
 
 const disconnect = () => db.disconnect();

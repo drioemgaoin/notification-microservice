@@ -1,8 +1,9 @@
 import * as Mailer from 'nodemailer';
+import * as Promise from 'bluebird';
 
 import { IMailOptions } from './model';
 
-const send = (mailOptions: IMailOptions, done: any) => {
+const send = (mailOptions: IMailOptions): any => {
     const transporter = Mailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -13,14 +14,16 @@ const send = (mailOptions: IMailOptions, done: any) => {
         }
     });
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-
-        console.log('Message sent: %s', info.messageId);
-        done();
-    });
+    return new Promise.Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                reject(error);
+            } else {
+                console.log('Message sent: %s', info.messageId);
+                resolve();
+            }
+        });
+    })
 };
 
 export {

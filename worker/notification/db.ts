@@ -1,25 +1,28 @@
 import * as mongoose from 'mongoose';
+import * as Promise from 'bluebird';
 
 const uri = 'mongodb://' + process.env.MONGODB_USERNAME + ':' + process.env.MONGODB_PASSWORD + '@cluster0-shard-00-00-keuyy.mongodb.net:27017,cluster0-shard-00-01-keuyy.mongodb.net:27017,cluster0-shard-00-02-keuyy.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
 
 let connection: any;
 
-const connect = (done: any) => {
-    if (connection) {
-        done();
-        return;
-    }
-
-    mongoose.connect(uri, { useMongoClient: true }, error => {
-        if (error) {
-            throw error;
+const connect = () => {
+    return new Promise.Promise((resolve, reject) => {
+        if (connection) {
+            resolve();
+        } else {
+             mongoose.connect(uri, { useMongoClient: true })
+                .then(() => {
+                    console.log('Connection opened sucessfully');
+                    connection = mongoose.connection;
+                    resolve();
+                });
         }
-
-        console.log('Connection opened sucessfully');
-        connection = mongoose.connection;
-        done();
     });
 }
+
+const getId = (id: string) => {
+    return mongoose.Types.ObjectId(id);
+};
 
 const disconnect = () => {
     if (connection) {
@@ -36,5 +39,6 @@ const disconnect = () => {
 
 export {
     connect,
-    disconnect
+    disconnect,
+    getId
 };

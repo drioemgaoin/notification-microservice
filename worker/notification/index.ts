@@ -43,10 +43,7 @@ router.post('/notification/:key', (ctx, next) => {
         });
 });
 
-const disconnect = () => db.disconnect();
-process.on('exit', disconnect);
-process.on('SIGTERM', disconnect);
-process.on('SIGINT', disconnect);
+process.on('SIGINT', () => db.disconnect().then(() => process.exit(0)));
 
 app.listen(3001, "127.0.0.1", () => {
     console.log("Notification Backend started listening on port 3001...");

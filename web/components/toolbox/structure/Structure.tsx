@@ -4,19 +4,35 @@ import * as bem from 'bem-classname';
 import {assign, times} from 'lodash';
 import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import * as PropTypes from 'prop-types';
+import { connect, Dispatch } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
 
 import Container from './Container';
+import actions from '../../../action';
+import { IState } from '../../../reducer';
 
-interface StructureProps extends StructureDndProps {
+interface StructureStateToProps {
+    selected: string;
+    hover: string;
+}
+
+interface StructureDispatchToProps {
+    actions: {
+        select: (id: string) => void;
+        hover: (id: string) => void;
+    }
+}
+
+interface StructureDndProps {
+    connectDragSource?: any;
+}
+
+interface StructureProps extends StructureDndProps, StructureStateToProps, StructureDispatchToProps {
     id?: string;
     numberOfColumns: number;
     rendered?: boolean;
     onClick?: (component: any) => void;
     onRemove?: (component: any) => void;
-}
-
-interface StructureDndProps {
-    connectDragSource?: any;
 }
 
 interface StructureState {
@@ -35,9 +51,11 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 });
 
 @DragSource('Grid', specSource, collectSource)
-export default class Structure extends React.Component<StructureProps, StructureState> {
+class Structure extends React.Component<StructureProps, StructureState> {
     private onClickBound = this.onClick.bind(this);
     private onRemoveBound = this.onRemove.bind(this);
+    private onSelectBound = this.onSelect.bind(this);
+    private onHoverBound = this.onHover.bind(this);
     private token: any;
 
     constructor(props: StructureProps) {
@@ -55,18 +73,6 @@ export default class Structure extends React.Component<StructureProps, Structure
             : this.renderDraggable();
     }
 
-    componentWillMount(){
-        this.token = PubSub.subscribe('COMPONENT_SELECTED', this.select.bind(this));
-    }
-
-    componentWillUnmount(){
-        PubSub.unsubscribe(this.token);
-    }
-
-    select(msg: string, id: any) {
-        this.setState({ selected: this.props.id === id ? !this.state.selected : false });
-    }
-
     private renderDraggable() {
         return this.props.connectDragSource(
             <div className='structure structure--draggable'>{this.props.numberOfColumns} column(s)</div>
@@ -74,11 +80,16 @@ export default class Structure extends React.Component<StructureProps, Structure
     }
 
     private renderDragged() {
-        const className = bem('structure', { selected: this.state.selected, dragged: true });
+        const selected = this.props.selected === this.props.id;
+        const hover = this.props.hover === this.props.id;
+        
+        const className = bem('structure', { selected: selected, dragged: true });
         return (
-            <div className={className}>
+            <div className={className}
+                onClick={this.onSelectBound}
+                onMouseEnter={this.onHoverBound}>
                 {
-                    this.state.selected && (
+                    selected && (
                         <div className='structure__toolbar'>
                             <span className='structure__toolbar__cross' onClick={this.onRemoveBound}></span>
                         </div>
@@ -117,4 +128,36 @@ export default class Structure extends React.Component<StructureProps, Structure
             this.props.onRemove(this);
         }
     }
+
+    private onSelect(e: React.SyntheticEvent<HTMLSpanElement>) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.props.actions.select(this.props.id || '');
+    }
+
+    private onHover(e: React.SyntheticEvent<HTMLSpanElement>) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.props.actions.hover(this.props.id || '');
+    }
 }
+
+const mapStateToProps = (state: IState) => {
+    return {
+        selected: state.selected,
+        hover: state.hover
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+    return {
+        actions: bindActionCreators(actions, dispatch),
+    };
+};
+
+export default connect<StructureStateToProps, StructureDispatchToProps, any>(
+    mapStateToProps,
+    mapDispatchToProps
+)(Structure);

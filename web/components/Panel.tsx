@@ -4,15 +4,12 @@ export interface IPanelProps {
     opened: boolean;
 }
 
-export interface IPanelState {
+const Panel: React.SFC<IPanelProps> = props => {
+    return props.opened ? (
+        <div className='Panel'>
+            {props.children}
+        </div>
+    ) : null;
 }
 
-export default class Panel extends React.Component<IPanelProps, IPanelState> {
-    render() {
-        return this.props.opened ? (
-            <div className='Panel'>
-                {this.props.children}
-            </div>
-        ) : null;
-    }
-}
+export default Panel;

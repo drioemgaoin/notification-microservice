@@ -7,8 +7,6 @@ import { bindActionCreators, compose } from 'redux';
 
 import Components from './toolbox/structureComponent';
 import BorderProperties from './components/border/BorderProperties';
-// import selectionActions from '../actions/selection';
-// import { IState } from '../reducers';
 
 interface RendererStateToProps {
     component: string;
@@ -20,14 +18,13 @@ interface RendererDispatchToProps {
     }
 }
 
-interface RendererProps { // extends RendererStateToProps, RendererDispatchToProps {
+interface RendererProps {
     connectDropTarget?: any;
     onClick?: (component: any) => void;
 }
 
 interface RendererState {
     components: Array<any>;
-    // component?: string;
 }
 
 const specTarget: DropTargetSpec<RendererProps> = {
@@ -46,14 +43,7 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
 
 @DropTarget('Grid', specTarget, collectTarget)
 export default class Renderer extends React.Component<RendererProps, RendererState> {
-    constructor(props: RendererProps) {
-        super(props);
-
-        this.state = {
-            components: [] //,
-            // component: props.component
-        };
-    }
+    state: RendererState = { components: [] };
 
     render() {
         return (
@@ -68,9 +58,7 @@ export default class Renderer extends React.Component<RendererProps, RendererSta
                                     key: id,
                                     id,
                                     rendered: true,
-                                    // selected: this.state.component === id,
-                                    // onClick: () => this.props.actions.select(id),
-                                    onRemove: this.remove.bind(component),
+                                    onRemove: this.remove,
                                     ...assign({}, component.properties)
                                 }
                             )
@@ -81,27 +69,7 @@ export default class Renderer extends React.Component<RendererProps, RendererSta
         )
     }
 
-    // componentWillUpdate(nextProps: RendererProps) {
-    //     if (this.state.component !== nextProps.component) {
-    //         this.setState({ component: nextProps.component });
-    //     }
-    // }
-
-    remove(component: any) {
-        this.setState({ components: filter(this.state.components, (x: any) => x.key !== component.props.id) });
-    }
+    private remove = (component: any) => {
+        this.setState(prevState => ({ components: filter(prevState.components, (x: any, index: number) => ('structure-' + (index + 1)) !== component.props.id) }));
+    };
 }
-
-// const mapStateToProps = (state: IState) => {
-    // return {
-        // component: state.selection.component
-    // };
-// };
-//
-// const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-    // return {
-        // actions: bindActionCreators(selectionActions, dispatch),
-    // };
-// }
-//
-// export default connect<RendererStateToProps, RendererDispatchToProps, any>(mapStateToProps, mapDispatchToProps)(Renderer);

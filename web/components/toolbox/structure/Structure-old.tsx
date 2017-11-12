@@ -7,19 +7,19 @@ import * as PropTypes from 'prop-types';
 import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 
-import Container from './Container';
+import Container from './Container-old';
 import actions from '../../../action';
 import { IState } from '../../../reducer';
 
 interface StructureStateToProps {
     selected: string;
-    hover: string;
+    highlight: string;
 }
 
 interface StructureDispatchToProps {
     actions: {
         select: (id: string) => void;
-        hover: (id: string) => void;
+        highlight: (id: string) => void;
     }
 }
 
@@ -37,7 +37,6 @@ interface StructureProps extends StructureDndProps, StructureStateToProps, Struc
 
 interface StructureState {
     style: any;
-    selected: boolean;
 }
 
 const specSource: DragSourceSpec<StructureProps> = {
@@ -53,17 +52,13 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 @DragSource('Grid', specSource, collectSource)
 class Structure extends React.Component<StructureProps, StructureState> {
     private onClickBound = this.onClick.bind(this);
-    private onRemoveBound = this.onRemove.bind(this);
-    private onSelectBound = this.onSelect.bind(this);
-    private onHoverBound = this.onHover.bind(this);
     private token: any;
 
     constructor(props: StructureProps) {
         super(props);
 
         this.state = {
-            style: { border: { borderColor: 'blue' }},
-            selected: false
+            style: { border: { borderColor: 'blue' }}
         };
     }
 
@@ -81,17 +76,19 @@ class Structure extends React.Component<StructureProps, StructureState> {
 
     private renderDragged() {
         const selected = this.props.selected === this.props.id;
-        const hover = this.props.hover === this.props.id;
-        
-        const className = bem('structure', { selected: selected, dragged: true });
+        const highlight = this.props.highlight === this.props.id;
+
+        const toolbarClassName = bem('structure__toolbar', { cross: selected, move: highlight });
+        const className = bem('structure', { selected: selected, hover: highlight, dragged: true });
         return (
             <div className={className}
-                onClick={this.onSelectBound}
-                onMouseEnter={this.onHoverBound}>
+                onClick={this.select}
+                onMouseEnter={this.highlight}
+                onMouseLeave={this.highlight}>
                 {
-                    selected && (
+                    (selected || highlight) && (
                         <div className='structure__toolbar'>
-                            <span className='structure__toolbar__cross' onClick={this.onRemoveBound}></span>
+                            <span className={toolbarClassName} onClick={this.remove}></span>
                         </div>
                     )
                 }
@@ -121,7 +118,7 @@ class Structure extends React.Component<StructureProps, StructureState> {
         }
     }
 
-    private onRemove(e: React.SyntheticEvent<HTMLSpanElement>) {
+    private remove = (e: React.SyntheticEvent<HTMLSpanElement>) => {
         e.preventDefault();
 
         if (this.props.onRemove) {
@@ -129,25 +126,25 @@ class Structure extends React.Component<StructureProps, StructureState> {
         }
     }
 
-    private onSelect(e: React.SyntheticEvent<HTMLSpanElement>) {
+    private select = (e: React.SyntheticEvent<HTMLSpanElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
         this.props.actions.select(this.props.id || '');
     }
 
-    private onHover(e: React.SyntheticEvent<HTMLSpanElement>) {
+    private highlight = (e: React.SyntheticEvent<HTMLSpanElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.actions.hover(this.props.id || '');
+        this.props.actions.highlight(this.props.id || '');
     }
 }
 
-const mapStateToProps = (state: IState) => {
+const mapStateToProps = (state: IState, ownProps: any) => {
     return {
         selected: state.selected,
-        hover: state.hover
+        highlight: state.highlight[ownProps.id]
     };
 };
 

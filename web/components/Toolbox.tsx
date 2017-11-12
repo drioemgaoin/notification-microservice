@@ -3,7 +3,7 @@ import * as React from 'react';
 import Date from './toolbox/date/Date';
 import List from './toolbox/list/List';
 import Text from './toolbox/text/Text';
-import Structure from './toolbox/structure/Structure';
+import Structure from './toolbox/draggable/structure/index';
 
 export default class Toolbox extends React.Component<any, any> {
     render() {

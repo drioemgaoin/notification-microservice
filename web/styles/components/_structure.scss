@@ -1,30 +1,33 @@
 .structure {
-    width: 100%;
+    display: flex;
     min-height: 70px;
     position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 
     &--dragged {
         display: flex;
+        margin: 0 auto;
+        background: rgba(222,242,250,.85);
+        outline: #2FAADE dashed 1px;
     }
 
     &--draggable {
         height: 100%;
     }
 
-    &--selected {
-        outline: #0473A3 solid 2px;
-        z-index: 500;
-    }
+    &__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: inherit;
+        color: #2FAADE;
 
-    &__toolbar {
-        height: inherit;
-        background: #2FAADE;
-
-        &__cross {
-            @include icon('\f00d');
-            float: right;
-            color: #fff;
-            cursor: pointer;
+        &:not(:first-child) {
+            border-left-color: #2FAADE;
+            border-left-style: dashed;
+            border-left-width: 1px;
         }
     }
 }

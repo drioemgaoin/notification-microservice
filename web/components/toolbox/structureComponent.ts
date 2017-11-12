@@ -1,4 +1,4 @@
-import Structure from './structure/Structure';
+import Structure from './structure/index';
 
 export default {
     'Structure': Structure

@@ -7,7 +7,7 @@
 
     &--selected {
         outline: #0473A3 solid 2px;
-        z-index: 500;
+        z-index: 600;
     }
 
     &--highlighted {
@@ -17,10 +17,9 @@
 
     &__icon {
         position: absolute;
-        cursor: pointer;
 
         &--move {
-            z-index: 600;
+            z-index: 500;
             font-family: FontAwesome;
             font-style: normal;
             display: block;
@@ -44,13 +43,11 @@
 
     &__toolbar {
         position: absolute;
-        cursor: pointer;
         bottom: -35px;
         right: -1px;
         margin: -5px 0px 0px 0px;
 
         &__icon {
-            z-index: 500;
             font-family: FontAwesome;
             font-style: normal;
             display: inline-block;

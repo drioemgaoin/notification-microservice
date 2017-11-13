@@ -6,8 +6,15 @@ interface ContainerToolbarProps {
 }
 
 const ContainerToolbar: React.SFC<ContainerToolbarProps> = props => {
+    const doNothing = (e: React.SyntheticEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
     return (
-        <div className='container__toolbar'>
+        <div className='container__toolbar'
+            onMouseEnter={doNothing}
+            onMouseLeave={doNothing}>
             <span className='container__toolbar__icon container__toolbar__icon--remove' onClick={props.click}></span>
             <span className='container__toolbar__icon container__toolbar__icon--clone' onClick={props.click}></span>
         </div>

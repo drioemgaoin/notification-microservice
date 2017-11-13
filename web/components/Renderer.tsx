@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { forEach, assign, filter } from 'lodash';
+import { forEach, assign, filter, find } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
@@ -58,7 +58,12 @@ export default class Renderer extends React.Component<RendererProps, RendererSta
                                     key: id,
                                     id,
                                     rendered: true,
-                                    onRemove: this.remove,
+                                    actions: {
+                                        toolbar: {
+                                            remove: this.remove,
+                                            clone: this.clone
+                                        }
+                                    },
                                     ...assign({}, component.properties)
                                 }
                             )
@@ -69,7 +74,14 @@ export default class Renderer extends React.Component<RendererProps, RendererSta
         )
     }
 
-    private remove = (component: any) => {
-        this.setState(prevState => ({ components: filter(prevState.components, (x: any, index: number) => ('structure-' + (index + 1)) !== component.props.id) }));
+    private remove = (componentName: string) => {
+        this.setState(prevState => ({ components: filter(prevState.components, (x: any, index: number) => ('structure-' + (index + 1)) !== componentName) }));
+    };
+
+    private clone = (componentName: string) => {
+        this.setState(prevState => {
+            const component = find(prevState.components, (x: any, index: number) => ('structure-' + (index + 1)) === componentName);
+            return { components: prevState.components.concat([assign(component)]) }
+        });
     };
 }

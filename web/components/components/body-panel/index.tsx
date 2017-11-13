@@ -8,10 +8,18 @@ import Panel from '../panel/index';
 const PanelBody: React.SFC<any> = props => {
     return (
         <Panel title='General options'>
-            <Field label='Background' ><ColorPicker /></Field>
-            <Field label='Content area background color' ><ColorPicker /></Field>
-            <Field label='Default font'><Select /></Field>
-            <Field label='Link color' ><ColorPicker /></Field>
+            <Field label='Background' >
+                <ColorPicker />
+            </Field>
+            <Field label='Content area background color' >
+                <ColorPicker />
+            </Field>
+            <Field label='Default font'>
+                <Select options={['Arial', 'Times New Roman']} />
+            </Field>
+            <Field label='Link color' >
+                <ColorPicker />
+            </Field>
         </Panel>
     )
 };

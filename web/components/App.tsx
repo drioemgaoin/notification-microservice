@@ -12,7 +12,6 @@ import StylePanel from './StylePanel';
 import WidgetTab from './components/widget-tab/index';
 
 class App extends React.Component<any, any> {
-    private onClickBound = this.onClick.bind(this);
     private onValidateBound = this.validate.bind(this);
     private onCancelBound = this.cancel.bind(this);
     private onStyleChangeBound = this.onStyleChange.bind(this);
@@ -35,32 +34,13 @@ class App extends React.Component<any, any> {
                     <h2>Notification UI</h2>
                 </div>
                 <div className='App__body'>
-                    {
-                        this.state.properties.length > 0 &&
-                        (
-                            <Properties properties={this.state.properties}
-                                        onValidate={this.onValidateBound}
-                                        onCancel={this.onCancelBound} />
-                        )
-                    }
-                    {
-                        this.state.openStylePanel &&
-                        (
-                            <StylePanel onChange={this.onStyleChangeBound}
-                                onClose={this.onStyleCloseBound} />
-                        )
-                    }
                     <WidgetTab />
-                    <Renderer ref='renderer' onClick={this.onClickBound} />
+                    <Renderer ref='renderer' />
                 </div>
                 <div className='App__footer'>
                 </div>
             </div>
         );
-    }
-
-    private onClick(component: any) {
-        PubSub.publish('COMPONENT_SELECTED', component.props.id);
     }
 
     private onStyleChange(style: any) {

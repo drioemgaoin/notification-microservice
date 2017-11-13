@@ -8,6 +8,7 @@ import EmptyContainer from '../../components/empty-container/index';
 interface StructureProps {
     id: string;
     numberOfColumns: number;
+    actions: any;
 }
 
 interface StructureState {
@@ -19,7 +20,7 @@ export default class Structure extends React.Component<StructureProps, Structure
 
     render() {
         return (
-            <Container id={this.props.id}>
+            <Container id={this.props.id} handlers={this.props.actions}>
                 <div className='structure structure--dragged'
                     style={this.state.style}>
                 {

@@ -23,6 +23,7 @@ interface ContainerDispatchToProps {
 
 interface ContainerProps extends ContainerStateToProps, ContainerDispatchToProps {
     id: string;
+    handlers: any;
 }
 
 class Container extends React.Component<ContainerProps, any> {
@@ -60,11 +61,14 @@ class Container extends React.Component<ContainerProps, any> {
         )
     }
 
-    private click = (e: React.SyntheticEvent<HTMLSpanElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        console.log('ACTION EXECUTING');
+    private click = (action: string) => {
+        const component = this.props.selected;
+        if (component) {
+            const handler = this.props.handlers['toolbar'][action];
+            if (handler) {
+                handler(this.props.id);
+            }
+        }
     }
 
     private move = (e: React.SyntheticEvent<HTMLSpanElement>) => {

@@ -9,7 +9,7 @@ import Renderer from './Renderer';
 import Properties from './Properties';
 import Ruler from './Ruler';
 import StylePanel from './StylePanel';
-import Toolbar from './Toolbar';
+import WidgetTab from './components/widget-tab/index';
 
 class App extends React.Component<any, any> {
     private onClickBound = this.onClick.bind(this);
@@ -50,10 +50,7 @@ class App extends React.Component<any, any> {
                                 onClose={this.onStyleCloseBound} />
                         )
                     }
-                    <Panel opened={true}>
-                        <Toolbar onChange={this.onMenuChangeBound} />
-                        {this.state.panel && (<Toolbox category={this.state.panel} />)}
-                    </Panel>
+                    <WidgetTab />
                     <Renderer ref='renderer' onClick={this.onClickBound} />
                 </div>
                 <div className='App__footer'>

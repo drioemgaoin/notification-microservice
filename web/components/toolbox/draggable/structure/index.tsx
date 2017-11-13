@@ -20,8 +20,17 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 });
 
 const Structure: React.SFC<any> = props => {
+    const getLabel = () => {
+        return props.numberOfColumns +
+            (
+                props.numberOfColumns === 1
+                ? ' column'
+                : ' column(s)'
+            )
+    };
+
     return props.connectDragSource(
-        <div className='structure structure--draggable'>{props.numberOfColumns} column(s)</div>
+        <div className='structure structure--draggable'>{getLabel()}</div>
     )
 };
 

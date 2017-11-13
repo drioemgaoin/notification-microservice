@@ -3,13 +3,13 @@ import * as ReactDOM from 'react-dom';
 import { SketchPicker } from 'react-color';
 
 interface ColorPickerProps {
-    value: string;
+    value?: string;
     onChange?: (color: string) => void;
 }
 
 interface ColorPickerState {
     open: boolean;
-    value: string;
+    value?: string;
 }
 
 export default class ColorPicker extends React.Component<ColorPickerProps, ColorPickerState> {
@@ -36,6 +36,7 @@ export default class ColorPicker extends React.Component<ColorPickerProps, Color
     }
 
     render() {
+        const style = { background: this.state.value || 'transparent' };
         return(
             <div className='color-picker'>
                 {
@@ -47,7 +48,7 @@ export default class ColorPicker extends React.Component<ColorPickerProps, Color
                     ) : (
                         <div className='color-picker__control'>
                             <div className='color-picker__control__preview'
-                                style={{ background: this.state.value }}
+                                style={style}
                                 onClick={this.onOpenBound} />
                             <span className='color-picker__control__title'>{this.state.value}</span>
                         </div>

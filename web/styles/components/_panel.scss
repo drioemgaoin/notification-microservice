@@ -3,3 +3,12 @@
     max-width: $panel-size;
     height: 100%;
 }
+
+.panel {
+    &__title {
+        background-color: #EAEAEA;
+        color: #505659;
+        text-transform: uppercase;
+        padding: 12px 10px;
+    }
+}

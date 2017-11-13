@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {assign} from 'lodash';
 
-import BackgroundProperties from './components/background/BackgroundProperties';
+import Field from './components/field/index';
+import ColorPicker from './components/color-picker/index';
 import PaddingProperties from './components/padding/PaddingProperties';
 import BorderProperties from './components/border/BorderProperties';
 
@@ -40,7 +41,10 @@ export default class StylePanel extends React.Component<StylePanelProps, StylePa
                         onClick={this.props.onClose}></span>
                 </div>
                 <div className='style-panel__body'>
-                    <BackgroundProperties onChange={this.onBackgroundChangeBound} />
+
+                    <Field label='Background'>
+                        <ColorPicker onChange={this.onBackgroundChangeBound} />
+                    </Field>
                     <PaddingProperties onChange={this.onPaddingChangeBound} />
                     <BorderProperties onChange={this.onBorderChangeBound} />
                 </div>

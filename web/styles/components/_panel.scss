@@ -5,10 +5,16 @@
 }
 
 .panel {
-    &__title {
-        background-color: #EAEAEA;
-        color: #505659;
-        text-transform: uppercase;
-        padding: 12px 10px;
+    &__header {
+        display: flex;
+        flex-direction: row;
+        
+        &__title {
+            flex: 1;
+            background-color: #EAEAEA;
+            color: #505659;
+            text-transform: uppercase;
+            padding: 12px 10px;
+        }
     }
 }

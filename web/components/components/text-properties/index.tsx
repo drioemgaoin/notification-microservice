@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import store from '../../../store';
+import actions from '../../../action';
 import Panel from '../panel/index';
 import Field from '../field/index';
 import ColorPicker from '../color-picker/index';
@@ -26,12 +28,15 @@ export default class TextProperties extends React.Component<any, any> {
             </div>
         );
     }
-    
+
     private renderToolbar() {
         return (<ElementToolbar click={this.click} />);
     }
-    
-    private click = (action: string) => {
-        
+
+    private click = (actionName: string) => {
+        const action = (actions as any)[actionName];
+        if (action) {
+            store.dispatch(action(store.getState().selected));
+        }
     };
 }

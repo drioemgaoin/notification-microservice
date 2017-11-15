@@ -1,13 +1,24 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as PropTypes from 'prop-types';
 import * as bem from 'bem-classname';
 import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
+import {
+    DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec,
+    DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec
+} from 'react-dnd';
 
 import actions from '../../../action';
 import { IState } from '../../../reducer';
 import ContainerToolbar from '../container-toolbar/index';
 import ButtonIcon from '../button/index';
+
+interface ContainerDndProps {
+    connectDragSource?: any;
+    connectDropTarget?: any;
+    connectDragPreview?: any;
+}
 
 interface ContainerStateToProps {
     selected: boolean;
@@ -18,14 +29,63 @@ interface ContainerDispatchToProps {
     actions: {
         select: (id: string) => void;
         highlight: (id: string) => void;
+        move: (hover: string, drag: string) => void;
     }
 }
 
-interface ContainerProps extends ContainerStateToProps, ContainerDispatchToProps {
+interface ContainerProps extends ContainerStateToProps, ContainerDispatchToProps, ContainerDndProps {
     id: string;
     handlers: any;
+    move?: (hover: string, drag: string) => void;
 }
 
+const specSource: DragSourceSpec<ContainerProps> = {
+    beginDrag(props: ContainerProps) {
+        return { id: props.id };
+    }
+};
+
+const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview()
+});
+
+const specTarget: DropTargetSpec<ContainerProps> = {
+    hover(props: ContainerProps, monitor: DropTargetMonitor, component: React.Component<ContainerProps, any>) {
+        const item: any = monitor.getItem();
+
+        const drag = item.id;
+		const hover = props.id;
+
+		if (drag === hover) {
+			return
+		}
+
+		const hoverBoundingRect = ReactDOM.findDOMNode(component).getBoundingClientRect()
+		const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+		const clientOffset = monitor.getClientOffset()
+		const hoverClientY = clientOffset.y - hoverBoundingRect.top
+
+		if (drag < hover && hoverClientY < hoverMiddleY) {
+			return
+		}
+
+		if (drag > hover && hoverClientY > hoverMiddleY) {
+			return
+		}
+
+        if (props.actions.move) {
+            props.actions.move(hover, drag)
+        }
+    }
+};
+
+const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+    connectDropTarget: connect.dropTarget()
+});
+
+@DragSource('Container', specSource, collectSource)
+@DropTarget('Container', specTarget, collectTarget)
 class Container extends React.Component<ContainerProps, any> {
     render() {
         const className = bem('container', {
@@ -34,30 +94,29 @@ class Container extends React.Component<ContainerProps, any> {
             dragged: true
         });
 
-        return (
-            <div
-                className={className}
-                onClick={this.select}
-                onMouseEnter={this.highlight}
-                onMouseLeave={this.highlight}
-            >
-                {
-                    (this.props.highlighted  || this.props.selected) &&
-                    (
-                        <span
-                            className='container__icon--move'
-                            onClick={this.move}
-                        />
-                    )
-                }
-                {
-                    this.props.selected &&
-                    (
-                        <ContainerToolbar click={this.click} />
-                    )
-                }
-                {this.props.children}
-            </div>
+        return this.props.connectDropTarget(
+            this.props.connectDragPreview(
+                <div
+                    className={className}
+                    onClick={this.select}
+                    onMouseEnter={this.highlight}
+                    onMouseLeave={this.highlight}
+                >
+                    {
+                        (this.props.highlighted  || this.props.selected) &&
+                        this.props.connectDragSource(
+                            <span className='container__icon--move' />
+                        )
+                    }
+                    {
+                        this.props.selected &&
+                        (
+                            <ContainerToolbar click={this.click} />
+                        )
+                    }
+                    {this.props.children}
+                </div>
+            )
         )
     }
 
@@ -69,13 +128,6 @@ class Container extends React.Component<ContainerProps, any> {
                 handler(this.props.id);
             }
         }
-    }
-
-    private move = (e: React.SyntheticEvent<HTMLSpanElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        console.log('MOVE COMPONENT');
     }
 
     private select = (e: React.SyntheticEvent<HTMLSpanElement>) => {
@@ -106,7 +158,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     };
 };
 
-export default connect<ContainerStateToProps, ContainerDispatchToProps>(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect<ContainerStateToProps, ContainerDispatchToProps>(mapStateToProps, mapDispatchToProps)
 )(Container);

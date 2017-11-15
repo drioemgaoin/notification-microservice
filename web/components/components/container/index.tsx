@@ -21,8 +21,8 @@ interface ContainerDndProps {
 }
 
 interface ContainerStateToProps {
-    selected: boolean;
-    highlighted: boolean;
+    selected: string;
+    highlighted: any;
 }
 
 interface ContainerDispatchToProps {
@@ -47,7 +47,7 @@ const specSource: DragSourceSpec<ContainerProps> = {
 
 const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
     connectDragSource: connect.dragSource(),
-    connectDragPreview: connect.dragPreview()
+    connectDragPreview: connect.dragPreview(),
 });
 
 const specTarget: DropTargetSpec<ContainerProps> = {
@@ -88,9 +88,12 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
 @DropTarget('Container', specTarget, collectTarget)
 class Container extends React.Component<ContainerProps, any> {
     render() {
+        const selected = this.props.selected === this.props.id;
+        const highlighted = this.props.highlighted[this.props.id] === true;
+
         const className = bem('container', {
-            selected: this.props.selected,
-            highlighted: this.props.highlighted,
+            selected,
+            highlighted,
             dragged: true
         });
 
@@ -103,13 +106,13 @@ class Container extends React.Component<ContainerProps, any> {
                     onMouseLeave={this.highlight}
                 >
                     {
-                        (this.props.highlighted  || this.props.selected) &&
+                        (highlighted || selected) &&
                         this.props.connectDragSource(
                             <span className='container__icon--move' />
                         )
                     }
                     {
-                        this.props.selected &&
+                        selected &&
                         (
                             <ContainerToolbar click={this.click} />
                         )
@@ -134,21 +137,21 @@ class Container extends React.Component<ContainerProps, any> {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.actions.select(this.props.id || '');
+        this.props.actions.select(this.props.id);
     }
 
     private highlight = (e: React.SyntheticEvent<HTMLSpanElement>) => {
         e.preventDefault();
         e.stopPropagation();
 
-        this.props.actions.highlight(this.props.id || '');
+        this.props.actions.highlight(this.props.id);
     }
 }
 
 const mapStateToProps = (state: IState, ownProps: any) => {
     return {
-        selected: state.selected === ownProps.id,
-        highlighted: state.highlighted[ownProps.id] !== undefined
+        selected: state.selected,
+        highlighted: state.highlighted
     };
 };
 

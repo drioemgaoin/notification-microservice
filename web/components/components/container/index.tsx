@@ -36,7 +36,6 @@ interface ContainerDispatchToProps {
 interface ContainerProps extends ContainerStateToProps, ContainerDispatchToProps, ContainerDndProps {
     id: string;
     handlers: any;
-    move?: (hover: string, drag: string) => void;
 }
 
 const specSource: DragSourceSpec<ContainerProps> = {

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Date from '../../toolbox/date/Date';
 import List from '../../toolbox/list/List';
-import Text from '../../toolbox/text/Text';
+import Text from '../../toolbox/draggable/text/index';
 
 const ContentPanel: React.SFC<any> = props => {
     return (

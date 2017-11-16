@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {assign} from 'lodash';
 
-import Select from '../select/Select';
+import Select from '../select/index';
 import InputNumberIncrement from '../input-number/InputNumberIncrement';
-import ColorPicker from '../color-picker/ColorPicker';
+import ColorPicker from '../color-picker/index';
 import Checkbox from '../checkbox/Checkbox';
 
 interface BorderPropertiesProps {

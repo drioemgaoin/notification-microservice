@@ -1,38 +1,42 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { forEach, assign, filter } from 'lodash';
+import { forEach, assign, filter, find } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
+import { connect, Dispatch } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
 
 import Components from './toolbox/structureComponent';
 import BorderProperties from './components/border/BorderProperties';
+import actions from '../action';
+import { IState } from '../reducer';
 
-export interface RendererProps {
+interface RendererStateToProps {
+    components: any[];
+}
+
+interface RendererDispatchToProps {
+    actions: {
+        select: (id: string) => void;
+        add: (component: any) => void;
+        clone: (id: string) => void;
+        remove: (id: string) => void;
+    }
+}
+
+interface RendererProps extends RendererStateToProps, RendererDispatchToProps {
     connectDropTarget?: any;
-    addComponent?: (component: any) => void;
     onClick?: (component: any) => void;
 }
 
+interface RendererState {
+    components: Array<any>;
+}
+
 const specTarget: DropTargetSpec<RendererProps> = {
-    drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, any>) {
+    drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, RendererState>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
-            const id = 'component-' + (component.state.components.length + 1);
-            const components = component.state.components.concat([
-                React.createElement(
-                    (Components as any)[item.name],
-                    {
-                        key: id,
-                        id,
-                        rendered: true,
-                        selected: false,
-                        onClick: component.props.onClick,
-                        onRemove: (component as any).remove.bind(component),
-                        ...assign({}, item.properties)
-                    }
-                )
-            ]);
-
-            component.setState({ components });
+            component.props.actions.add(assign({}, {...item}, { id: 'structure-' + (component.props.components.length + 1) }));
         }
     }
 }
@@ -41,27 +45,57 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
     connectDropTarget: connect.dropTarget()
 });
 
-@DropTarget('Grid', specTarget, collectTarget)
-export default class Renderer extends React.Component<RendererProps, any> {
-    constructor(props: RendererProps) {
-        super(props);
-
-        this.state = { components: [] };
-    }
-
+class Renderer extends React.Component<RendererProps, RendererState> {
     render() {
         return (
             this.props.connectDropTarget(
                 <div className='Renderer'>
-                    { this.state.components }
+                    {
+                        this.props.components.map((component, index) => {
+                            return React.createElement(
+                                (Components as any)[component.name],
+                                {
+                                    key: component.id,
+                                    id: component.id,
+                                    rendered: true,
+                                    actions: {
+                                        toolbar: {
+                                            remove: this.remove,
+                                            clone: this.clone
+                                        }
+                                    },
+                                    ...assign({}, component.properties)
+                                }
+                            )
+                        })
+                    }
                 </div>
             )
         )
     }
 
-    remove(component: any) {
-        this.setState({ components: filter(this.state.components, (x: any) => x.key !== component.props.id) });
-    }
+    private remove = (componentId: string) => {
+        this.props.actions.remove(componentId);
+    };
+
+    private clone = (componentId: string) => {
+        this.props.actions.clone(componentId);
+    };
 }
 
-(Renderer as any).propTypes = {};
+const mapStateToProps = (state: IState, ownProps: any) => {
+    return {
+        components: state.components
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+    return {
+        actions: bindActionCreators(actions, dispatch),
+    };
+};
+
+export default compose(
+    connect<RendererStateToProps, RendererDispatchToProps>(mapStateToProps, mapDispatchToProps),
+    DropTarget('Grid', specTarget, collectTarget)
+)(Renderer);

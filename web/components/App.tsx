@@ -9,10 +9,9 @@ import Renderer from './Renderer';
 import Properties from './Properties';
 import Ruler from './Ruler';
 import StylePanel from './StylePanel';
-import Toolbar from './Toolbar';
+import WidgetTab from './components/widget-tab/index';
 
 class App extends React.Component<any, any> {
-    private onClickBound = this.onClick.bind(this);
     private onValidateBound = this.validate.bind(this);
     private onCancelBound = this.cancel.bind(this);
     private onStyleChangeBound = this.onStyleChange.bind(this);
@@ -35,35 +34,13 @@ class App extends React.Component<any, any> {
                     <h2>Notification UI</h2>
                 </div>
                 <div className='App__body'>
-                    {
-                        this.state.properties.length > 0 &&
-                        (
-                            <Properties properties={this.state.properties}
-                                        onValidate={this.onValidateBound}
-                                        onCancel={this.onCancelBound} />
-                        )
-                    }
-                    {
-                        this.state.openStylePanel &&
-                        (
-                            <StylePanel onChange={this.onStyleChangeBound}
-                                onClose={this.onStyleCloseBound} />
-                        )
-                    }
-                    <Panel opened={true}>
-                        <Toolbar onChange={this.onMenuChangeBound} />
-                        {this.state.panel && (<Toolbox category={this.state.panel} />)}
-                    </Panel>
-                    <Renderer ref='renderer' onClick={this.onClickBound} />
+                    <WidgetTab />
+                    <Renderer ref='renderer' />
                 </div>
                 <div className='App__footer'>
                 </div>
             </div>
         );
-    }
-
-    private onClick(component: any) {
-        PubSub.publish('COMPONENT_SELECTED', component.props.id);
     }
 
     private onStyleChange(style: any) {

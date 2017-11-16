@@ -1,0 +1,47 @@
+.element-toolbar {
+    display: block;
+    
+    &__icon {
+        font-family: FontAwesome;
+        font-style: normal;
+        display: inline-block;
+        width: 42px;
+        height: 42px;
+        line-height: 42px;
+        color: #505659;
+        background: #EAEAEA;
+        border: 1px solid #E1E4E7;
+        text-align: center;
+        cursor: pointer;
+
+        &:first-child {
+            border-left: 1px solid #E1E4E7;
+        }
+        
+        &:not(:first-child) {
+            border-left: 1px solid #E1E4E7;
+            border-right: 1px solid #E1E4E7;
+        }
+
+        &--remove {
+            &:before {
+                content: '\f1f8';
+                font-size: 18px;
+            }
+        }
+
+        &--clone {
+            &:before {
+                content: '\f24d';
+                font-size: 18px;
+            }
+        }
+        
+        &--close {
+            &:before {
+                content: '\f107';
+                font-size: 18px;
+            }
+        }
+    }
+}

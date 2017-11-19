@@ -36,6 +36,7 @@ interface ContainerDispatchToProps {
 interface ContainerProps extends ContainerStateToProps, ContainerDispatchToProps, ContainerDndProps {
     id: string;
     handlers: any;
+    moveOnRightSide?: boolean;
 }
 
 const specSource: DragSourceSpec<ContainerProps> = {
@@ -96,6 +97,11 @@ class Container extends React.Component<ContainerProps, any> {
             dragged: true
         });
 
+        const moveClassName = bem('container__icon', {
+            move: !this.props.moveOnRightSide,
+            'move-right': this.props.moveOnRightSide
+        });
+
         return this.props.connectDropTarget(
             this.props.connectDragPreview(
                 <div
@@ -107,7 +113,7 @@ class Container extends React.Component<ContainerProps, any> {
                     {
                         (highlighted || selected) &&
                         this.props.connectDragSource(
-                            <span className='container__icon--move' />
+                            <span className={moveClassName} />
                         )
                     }
                     {

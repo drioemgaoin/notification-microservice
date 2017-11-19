@@ -62,6 +62,7 @@ export default class Text extends React.Component<TextProps, TextState> {
             <Container 
                 id={this.props.id}
                 handlers={this.props.actions}
+                moveOnRightSide={true}
             >
                 <Textarea 
                     className='text text--dragged'

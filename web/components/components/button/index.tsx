@@ -1,13 +1,22 @@
 import * as React from 'react';
+import * as cx from 'classnames';
 
-interface ButtonIconProps {
-    click: (e: React.SyntheticEvent<HTMLSpanElement>) => void;
+interface ButtonProps {
+    className?: string;
+    label: string;
+    click?: () => void;
 }
 
-const ButtonIcon: React.SFC<ButtonIconProps> = props => {
+const Button: React.SFC<any> = props => {
+    const className= cx('button', props.className)
     return (
-        <span className='button-icon' onClick={props.click}></span>
+        <button 
+            className={className}
+            onClick={props.click}
+        >
+            {props.label}
+        </button>
     );
 };
 
-export default ButtonIcon;
+export default Button;

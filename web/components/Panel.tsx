@@ -1,12 +1,15 @@
 import * as React from 'react';
+import * as cx from 'classnames';
 
-export interface IPanelProps {
+export interface PanelProps {
     opened: boolean;
+    className?: string;
 }
 
-const Panel: React.SFC<IPanelProps> = props => {
+const Panel: React.SFC<PanelProps> = props => {
+    const className = cx('Panel', props.className);
     return props.opened ? (
-        <div className='Panel'>
+        <div className={className}>
             {props.children}
         </div>
     ) : null;

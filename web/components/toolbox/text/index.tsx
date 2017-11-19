@@ -5,6 +5,7 @@ import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } fr
 import * as PropTypes from 'prop-types';
 import * as moment from 'moment';
 import { pick } from 'lodash';
+import Textarea from 'react-textarea-autosize';
 
 import getSchema from './schema';
 import Container from '../../components/container/index';
@@ -62,16 +63,11 @@ export default class Text extends React.Component<TextProps, TextState> {
                 id={this.props.id}
                 handlers={this.props.actions}
             >
-                <textarea 
+                <Textarea 
                     className='text text--dragged'
-                    style={{
-                        height: this.state.height || 'inherit'
-                    }}
                     defaultValue={this.state.value}
-                    onChange={this.change}
-                    onKeyUp={this.setFilledHeight}
                 > 
-                </textarea>
+                </Textarea>
                 <div
                     className='text text--ghost'
                     ref={(c) => this.ghost = c}
@@ -85,7 +81,10 @@ export default class Text extends React.Component<TextProps, TextState> {
 
     private change = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
         const { value } = e.currentTarget;
+        
         this.setState({ value });
+
+        this.setFilledHeight();
     }
 
     private setFilledHeight = () => {

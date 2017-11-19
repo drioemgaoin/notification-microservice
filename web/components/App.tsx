@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as PubSub from 'pubsub-js';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -17,6 +18,7 @@ class App extends React.Component<any, any> {
     private onStyleChangeBound = this.onStyleChange.bind(this);
     private onStyleCloseBound = this.onStyleClose.bind(this);
     private onMenuChangeBound = this.onMenuChange.bind(this);
+    private renderer: any;
 
     constructor(props: any) {
         super(props);
@@ -34,13 +36,27 @@ class App extends React.Component<any, any> {
                     <h2>Notification UI</h2>
                 </div>
                 <div className='App__body'>
-                    <WidgetTab />
+                    <WidgetTab 
+                        actions={{ 
+                            save: this.save
+                        }} 
+                    />
                     <Renderer ref='renderer' />
                 </div>
                 <div className='App__footer'>
                 </div>
             </div>
         );
+    }
+
+    private save = () => {
+        const renderer = (this.refs['renderer'] as any).getWrappedInstance().decoratedComponentInstance;
+        if (renderer) {
+            const template = ReactDOM.findDOMNode(renderer);
+            
+            //TODO: save it 
+            console.log(template);
+        }
     }
 
     private onStyleChange(style: any) {

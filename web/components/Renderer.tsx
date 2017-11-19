@@ -57,6 +57,7 @@ class Renderer extends React.Component<RendererProps, RendererState> {
                                 {
                                     key: component.id,
                                     id: component.id,
+                                    ref: component.id,
                                     rendered: true,
                                     actions: {
                                         toolbar: {
@@ -96,6 +97,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 };
 
 export default compose(
-    connect<RendererStateToProps, RendererDispatchToProps>(mapStateToProps, mapDispatchToProps),
+    connect<RendererStateToProps, RendererDispatchToProps>(mapStateToProps, mapDispatchToProps, null, { withRef: true }),
     DropTarget('Grid', specTarget, collectTarget)
 )(Renderer);

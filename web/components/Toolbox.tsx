@@ -12,7 +12,7 @@ export default class Toolbox extends React.Component<any, any> {
                 {this.props.category === 'content' && (<ContentPanel />)}
                 {this.props.category === 'structure' && (<StructurePanel />)}
                 {this.props.category === 'body' && (<BodyPanel />)}
-                {this.props.category === 'action' && (<ActionPanel />)}
+                {this.props.category === 'action' && (<ActionPanel actions={this.props.actions} />)}
             </div>
         );
     }

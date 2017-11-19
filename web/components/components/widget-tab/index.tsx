@@ -15,7 +15,13 @@ export default class WidgetTab extends React.Component<any, any> {
                     active={this.state.category}
                 />
                 <div className='widget-tab__content'>
-                    {this.state.category && (<Toolbox category={this.state.category} />)}
+                    {
+                        this.state.category && (
+                            <Toolbox 
+                                category={this.state.category} 
+                                actions={this.props.actions}
+                            />
+                    )}
                 </div>
             </div>
         )

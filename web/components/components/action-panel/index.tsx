@@ -17,6 +17,9 @@ export default class ActionPanel extends React.Component<any, any> {
     }
 
     private save = () => {
-        console.log('SAVE');
+        const save = this.props.actions['save'];
+        if (save) {
+            save();
+        }
     }
 }

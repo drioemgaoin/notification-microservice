@@ -128,6 +128,12 @@ class Container extends React.Component<ContainerProps, any> {
         )
     }
 
+    public getValue() {
+        return this.props.children 
+            ? (this.props.children as any).getValue()
+            : undefined ;
+    }
+
     private click = (action: string) => {
         const component = this.props.selected;
         if (component) {

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import * as cx from 'classnames';
+import * as bem from 'bem-classname';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
+
+import Components from '../../toolbox/contentComponent';
 
 interface ContainerDndProps {
     connectDropTarget?: any;
@@ -8,7 +11,6 @@ interface ContainerDndProps {
 
 interface EmptyContainerProps extends ContainerDndProps {
     className: string;
-    style: any;
 }
 
 const specTarget: DropTargetSpec<EmptyContainerProps> = {
@@ -26,23 +28,27 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
 export default class EmptyContainer extends React.Component<EmptyContainerProps, any> {
     state = { components: [] };
     render() {
-        const className = cx('empty-container', this.props.className);
+        let className = bem('empty-container', { 
+            empty: this.state.components.length === 0,
+            full: this.state.components.length > 0 
+        });
+        className = cx(className, this.props.className);
+
         return this.props.connectDropTarget(
-            <div className={className}
-                style={this.props.style}>
+            <div className={className}>
                 {
                     this.state.components.length > 0 
                     ? this.state.components.map((component, index) => {
                         const id = 'element-' + (this.state.components.length + 1);
                         return React.createElement(
-                            component,
+                            (Components as any)[component],
                             {
                                 key: id,
                                 id
                             }
                         )
                     })
-                    : "No content here. Drag new from 'Content' panel."
+                    : (<span>No content here. Drag new from 'Content' panel.</span>)
                 }
             </div>
         )

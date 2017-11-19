@@ -29,12 +29,8 @@ export default class Structure extends React.Component<StructureProps, Structure
                     style={this.state.style}>
                 {
                     times(this.props.numberOfColumns, (index: number) => {
-                        const style = { ...this.state.style, flex: 1 };
                         return (
-                            <EmptyContainer
-                                className='structure__content'
-                                style={style}
-                            />
+                            <EmptyContainer className='structure__content' />
                         );
                     })
                 }

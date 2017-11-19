@@ -1,22 +1,28 @@
 .text {
-    @include draggable;
-    min-height: 30px;
-    z-index: 10;
-
-    &--selected {
-        outline: #0473A3 solid 2px;
-        z-index: 500;
+    &--dragged {
+        text-align: left;
+        width: 100%;
+        border: none;
+        margin: 0;
+        outline: none;
+        padding: 0px;
+        cursor: text;
+        resize: none;
+        overflow: hidden;
+        font-size: 14px;
+        
+        &:hover {
+            cursor: text;
+        }
     }
 
-    &__toolbar {
-        height: inherit;
-        background: #2FAADE;
-
-        &__cross {
-            @include icon('\f00d');
-            float: right;
-            color: #fff;
-            cursor: pointer;
-        }
+    &--ghost {
+        opacity: 0.3;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
     }
 }

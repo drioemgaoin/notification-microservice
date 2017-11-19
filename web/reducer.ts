@@ -27,7 +27,7 @@ const moveItem = (hover: string, drag: string) => {
 };
 
 const select = (state: IState, action: Action<string>) => {
-    return assign({}, state, { selected: action.payload === state.selected ? undefined : action.payload });
+    return assign({}, state, { selected: action.payload });
 };
 
 const highlight = (state: IState, action: Action<any>) => {

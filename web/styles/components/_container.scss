@@ -1,9 +1,14 @@
 .container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
     min-height: 70px;
     box-sizing:border-box;
     text-align: center;
     position: relative;
     cursor: pointer;
+    width: 100%;
 
     &--selected {
         outline: #0473A3 solid 2px;
@@ -23,6 +28,7 @@
             font-family: FontAwesome;
             font-style: normal;
             display: block;
+            left:0;
             width: 30px;
             height: 30px;
             position: absolute;

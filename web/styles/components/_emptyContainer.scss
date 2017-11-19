@@ -1,0 +1,22 @@
+.empty-container {
+    display: flex;
+    flex: 1;
+
+    &--empty {
+        align-items: center;
+        color: #2FAADE;
+        background: rgba(222,242,250,.85);
+        outline: #2FAADE dashed 1px;
+        outline-offset: -1px;
+
+        > span {
+            margin: auto;
+            align-self: center;
+        }
+    }
+
+    &--full {
+        align-items: stretch;
+        height: 100%;
+    }
+}

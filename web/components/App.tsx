@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import * as PubSub from 'pubsub-js';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+import { replace } from 'lodash';
 
 import Panel from './Panel';
 import Toolbox from './Toolbox';
@@ -11,6 +12,7 @@ import Properties from './Properties';
 import Ruler from './Ruler';
 import StylePanel from './StylePanel';
 import WidgetTab from './components/widget-tab/index';
+import * as htmlContent from '../template.html';
 
 class App extends React.Component<any, any> {
     private onValidateBound = this.validate.bind(this);
@@ -55,7 +57,8 @@ class App extends React.Component<any, any> {
             const template = ReactDOM.findDOMNode(renderer);
             
             //TODO: save it 
-            console.log(template);
+            const mail = replace(htmlContent.toString(), '{content}', template.innerHTML)
+            console.log(mail);
         }
     }
 

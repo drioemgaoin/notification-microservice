@@ -3,6 +3,7 @@ const path = require('path');
 const HtmlwebpackPlugin = require('html-webpack-plugin');
 const ROOT_PATH = path.resolve(__dirname);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 module.exports = {
     entry: [
@@ -20,7 +21,7 @@ module.exports = {
     devtool: "source-map",
 
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".html"]
+        extensions: [".ts", ".tsx", ".js"]
     },
 
     module: {
@@ -36,17 +37,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [
-                    {
-                        loader: "style-loader"  // creates style nodes from JS strings
-                    },
-                    {
-                        loader: "css-loader"    // translates CSS into CommonJS
-                    },
-                    {
-                        loader: "sass-loader"   // compiles Sass to CSS
-                    }
-                ]
+                loader: ExtractTextPlugin.extract('css-loader!sass-loader')
             },
             {
                 test: /\.png$/,
@@ -74,7 +65,8 @@ module.exports = {
             },
             { 
                 test: /\.html$/, 
-                loader: 'html-loader' 
+                loader: 'html-loader',
+                exclude: path.resolve(__dirname, '/web/dist')
             }
         ]
     },
@@ -94,6 +86,7 @@ module.exports = {
             inject: 'body',
             filename: 'index.html'
         }),
+        new HtmlWebpackHarddiskPlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),

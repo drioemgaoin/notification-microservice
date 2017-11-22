@@ -4,6 +4,7 @@ import * as PubSub from 'pubsub-js';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { replace } from 'lodash';
+import * as FileSaver from 'file-saver';
 
 import Panel from './Panel';
 import Toolbox from './Toolbox';
@@ -55,10 +56,10 @@ class App extends React.Component<any, any> {
         const renderer = (this.refs['renderer'] as any).getWrappedInstance().decoratedComponentInstance;
         if (renderer) {
             const template = ReactDOM.findDOMNode(renderer);
-            
-            //TODO: save it 
-            const mail = replace(htmlContent.toString(), '{content}', template.innerHTML)
-            console.log(mail);
+           
+            const mail: any = replace(htmlContent.toString(), '{content}', template.innerHTML);
+            var file = new File([mail], "mail.html", {type: "text/plain;charset=utf-8"});
+            FileSaver.saveAs(file);
         }
     }
 

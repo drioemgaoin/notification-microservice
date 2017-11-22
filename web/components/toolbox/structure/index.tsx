@@ -17,7 +17,11 @@ interface StructureState {
 }
 
 export default class Structure extends React.Component<StructureProps, StructureState> {
-    state = { style: { border: { borderColor: 'blue' }} };
+    state = { 
+        style: { 
+            display: 'flex'
+        } 
+    };
 
     render() {
         return (
@@ -25,13 +29,15 @@ export default class Structure extends React.Component<StructureProps, Structure
                 id={this.props.id}
                 handlers={this.props.actions}
             >
-                <div ref='template' className='structure structure--dragged'
+                <div className='structure structure--dragged'
                     style={this.state.style}>
                 {
                     times(this.props.numberOfColumns, (index: number) => {
                         return (
                             <EmptyContainer 
-                                id={this.props.id + '-' + index} 
+                                key={this.props.id + '-' + index}
+                                id={this.props.id + '-' + index}
+                                ref={this.props.id + '-' + index}
                                 className='structure__content' 
                             />
                         );
@@ -43,6 +49,17 @@ export default class Structure extends React.Component<StructureProps, Structure
     }
 
     getValue() {
-        return this.refs.template;
+        return (
+            <div 
+                style={this.state.style}
+            >
+                {
+                    Object.keys(this.refs).map((key: string) => {
+                        const component = (this.refs[key] as any).decoratedComponentInstance
+                        return component.getValue();
+                    })
+                }
+            </div>
+        );
     }
 }

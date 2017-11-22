@@ -102,10 +102,15 @@ class Container extends React.Component<ContainerProps, any> {
             'move-right': this.props.moveOnRightSide
         });
 
+        const style = {
+            width: '100%'
+        };
+
         return this.props.connectDropTarget(
             this.props.connectDragPreview(
                 <div
                     className={className}
+                    style={style}
                     onClick={this.select}
                     onMouseEnter={this.highlight}
                     onMouseLeave={this.highlight}

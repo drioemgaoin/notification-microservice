@@ -75,6 +75,10 @@ class Renderer extends React.Component<RendererProps, RendererState> {
         )
     }
 
+    getValue() {
+        return Object.keys(this.refs).map((key: string) => (this.refs[key] as any).getValue());
+    }
+
     private remove = (componentId: string) => {
         this.props.actions.remove(componentId);
     };

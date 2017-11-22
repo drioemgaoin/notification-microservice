@@ -3,7 +3,6 @@ const path = require('path');
 const HtmlwebpackPlugin = require('html-webpack-plugin');
 const ROOT_PATH = path.resolve(__dirname);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 module.exports = {
     entry: [
@@ -65,8 +64,7 @@ module.exports = {
             },
             { 
                 test: /\.html$/, 
-                loader: 'html-loader',
-                exclude: path.resolve(__dirname, '/web/dist')
+                loader: 'html-loader'
             }
         ]
     },
@@ -86,7 +84,6 @@ module.exports = {
             inject: 'body',
             filename: 'index.html'
         }),
-        new HtmlWebpackHarddiskPlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),

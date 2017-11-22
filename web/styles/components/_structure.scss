@@ -2,8 +2,6 @@
     position: relative;
 
     &--dragged {
-        display: flex;
-        flex-direction: row;
         justify-content: center;
         align-items: stretch;
         width: calc(100% - 60px);

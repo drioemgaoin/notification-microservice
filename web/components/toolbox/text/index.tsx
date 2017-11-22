@@ -4,7 +4,7 @@ import * as bem from 'bem-classname';
 import { DragSource, DragSourceConnector, DragSourceMonitor, DragSourceSpec } from 'react-dnd';
 import * as PropTypes from 'prop-types';
 import * as moment from 'moment';
-import { pick } from 'lodash';
+import { pick, split, join } from 'lodash';
 import Textarea from 'react-textarea-autosize';
 
 import getSchema from './schema';
@@ -23,6 +23,7 @@ interface TextProps extends TextDndProps {
 interface TextState {
     value: string;
     height?: any;
+    style: any;
 }
 
 const specSource: DragSourceSpec<TextProps> = {
@@ -37,10 +38,6 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 
 @DragSource('Element', specSource, collectSource)
 export default class Text extends React.Component<TextProps, TextState> {
-    private static DEFAULT_HEIGHT = 70;
-
-    private ghost: any;
-
     static defaultProps = {
         value: 'I\'m a new Text block ready for your content.'
     }
@@ -49,12 +46,12 @@ export default class Text extends React.Component<TextProps, TextState> {
         super(props);
 
         this.state = {
-            value: props.value        
+            value: props.value,
+            style: { 
+                width: '100%',
+                whiteSpace: 'pre-wrap'
+            }   
         };
-    }
-
-    componentDidMount() {
-        this.setFilledHeight();
     }
 
     render() {
@@ -67,35 +64,24 @@ export default class Text extends React.Component<TextProps, TextState> {
                 <Textarea 
                     className='text text--dragged'
                     defaultValue={this.state.value}
-                > 
-                </Textarea>
-                <div
-                    className='text text--ghost'
-                    ref={(c) => this.ghost = c}
-                    aria-hidden='true'
-                >
-                    {this.state.value}
-                </div>
+                    style={this.state.style}
+                    onChange={this.change}
+                /> 
             </Container>
+        );
+    }
+
+    getValue() {
+        return (
+            <div style={this.state.style}>
+                {this.state.value}
+            </div>
         );
     }
 
     private change = (e: React.SyntheticEvent<HTMLTextAreaElement>) => {
         const { value } = e.currentTarget;
-        
         this.setState({ value });
-
-        this.setFilledHeight();
-    }
-
-    private setFilledHeight = () => {
-        const element = this.ghost;
-    
-        if (element.clientHeight > Text.DEFAULT_HEIGHT) {
-            this.setState({
-                height: element.clientHeight,
-            });
-        }
     }
 }
 

@@ -33,11 +33,12 @@ export default class Structure extends React.Component<StructureProps, Structure
                     style={this.state.style}>
                 {
                     times(this.props.numberOfColumns, (index: number) => {
+                        const id = this.props.id + '-' + index;
                         return (
                             <EmptyContainer 
-                                key={this.props.id + '-' + index}
-                                id={this.props.id + '-' + index}
-                                ref={this.props.id + '-' + index}
+                                key={id}
+                                id={this.props.id}
+                                ref={id}
                                 className='structure__content' 
                             />
                         );

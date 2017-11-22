@@ -45,6 +45,7 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
     connectDropTarget: connect.dropTarget()
 });
 
+@DropTarget('Grid', specTarget, collectTarget)
 class Renderer extends React.Component<RendererProps, RendererState> {
     render() {
         return (
@@ -63,6 +64,9 @@ class Renderer extends React.Component<RendererProps, RendererState> {
                                         toolbar: {
                                             remove: this.remove,
                                             clone: this.clone
+                                        },
+                                        component: {
+                                            click: this.props.onClick
                                         }
                                     },
                                     ...assign({}, component.properties)
@@ -88,8 +92,9 @@ class Renderer extends React.Component<RendererProps, RendererState> {
     };
 }
 
-const mapStateToProps = (state: IState, ownProps: any) => {
+const mapStateToProps = (state: IState, ownProps: RendererProps) => {
     return {
+        ...ownProps,
         components: state.components
     };
 };
@@ -100,7 +105,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     };
 };
 
-export default compose(
-    connect<RendererStateToProps, RendererDispatchToProps>(mapStateToProps, mapDispatchToProps, null, { withRef: true }),
-    DropTarget('Grid', specTarget, collectTarget)
-)(Renderer);
+export default connect<RendererStateToProps, RendererDispatchToProps>(mapStateToProps, mapDispatchToProps, null, { withRef: true })(Renderer);

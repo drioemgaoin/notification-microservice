@@ -47,13 +47,14 @@ export default class EmptyContainer extends React.Component<EmptyContainerProps,
             >
                 {
                     this.state.components.length > 0 
-                    ? this.state.components.map((component, index) => {
+                    ? this.state.components.map((component: string, index: number) => {
+                        const id = this.props.id + '-' + component.toLowerCase() + '-' + index;
                         return React.createElement(
                             (Components as any)[component],
                             {
-                                key: this.props.id,
-                                id: this.props.id,
-                                ref: this.props.id
+                                key: id,
+                                id,
+                                ref: id
                             }
                         )
                     })

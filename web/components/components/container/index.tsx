@@ -140,13 +140,7 @@ class Container extends React.Component<ContainerProps, any> {
     }
 
     private click = (action: string) => {
-        const component = this.props.selected;
-        if (component) {
-            const handler = this.props.handlers['toolbar'][action];
-            if (handler) {
-                handler(this.props.id);
-            }
-        }
+        this.execute('toolbar', action);
     }
 
     private select = (e: React.SyntheticEvent<HTMLSpanElement>) => {
@@ -154,6 +148,8 @@ class Container extends React.Component<ContainerProps, any> {
         e.stopPropagation();
 
         this.props.actions.select(this.props.id);
+
+        this.execute('component', 'click');
     }
 
     private highlight = (e: React.SyntheticEvent<HTMLSpanElement>) => {
@@ -161,6 +157,16 @@ class Container extends React.Component<ContainerProps, any> {
         e.stopPropagation();
 
         this.props.actions.highlight(this.props.id);
+    }
+
+    private execute(handler: string, actionName: string) {
+        const component = this.props.selected;
+        if (component) {
+            const action = this.props.handlers[handler][actionName];
+            if (action) {
+                action(this.props.id);
+            }
+        }
     }
 }
 

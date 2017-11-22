@@ -6,6 +6,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { replace } from 'lodash';
 import * as FileSaver from 'file-saver';
 import * as ReactDOMServer from 'react-dom/server';
+import { connect } from 'react-redux';
 
 import Panel from './Panel';
 import Toolbox from './Toolbox';
@@ -15,6 +16,7 @@ import Ruler from './Ruler';
 import StylePanel from './StylePanel';
 import WidgetTab from './components/widget-tab/index';
 import * as htmlContent from '../template.html';
+import { IState } from '../reducer';
 
 class App extends React.Component<any, any> {
     private onValidateBound = this.validate.bind(this);
@@ -22,7 +24,6 @@ class App extends React.Component<any, any> {
     private onStyleChangeBound = this.onStyleChange.bind(this);
     private onStyleCloseBound = this.onStyleClose.bind(this);
     private onMenuChangeBound = this.onMenuChange.bind(this);
-    private renderer: any;
 
     constructor(props: any) {
         super(props);
@@ -41,9 +42,7 @@ class App extends React.Component<any, any> {
                 </div>
                 <div className='App__body'>
                     <WidgetTab 
-                        actions={{ 
-                            save: this.save
-                        }} 
+                        actions={{ save: this.save }} 
                     />
                     <Renderer ref='renderer' />
                 </div>
@@ -87,4 +86,10 @@ class App extends React.Component<any, any> {
     }
 }
 
-export default DragDropContext(HTML5Backend)(App);
+const mapStateToProps = (state: IState) => {
+    return {
+        component: state.selected
+    };
+};
+
+export default DragDropContext(HTML5Backend)(connect<any, undefined>(mapStateToProps, undefined)(App));

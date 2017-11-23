@@ -18,21 +18,14 @@ import WidgetTab from './components/widget-tab/index';
 import * as htmlContent from '../template.html';
 import { IState } from '../reducer';
 
-class App extends React.Component<any, any> {
-    private onValidateBound = this.validate.bind(this);
-    private onCancelBound = this.cancel.bind(this);
-    private onStyleChangeBound = this.onStyleChange.bind(this);
-    private onStyleCloseBound = this.onStyleClose.bind(this);
-    private onMenuChangeBound = this.onMenuChange.bind(this);
+interface AppProps {}
 
-    constructor(props: any) {
-        super(props);
+interface AppState {
+    category?: string;
+}
 
-        this.state = {
-            properties: [],
-            openStylePanel: false
-        };
-    }
+class App extends React.Component<AppProps, AppState> {
+    state = { category: undefined };
 
     render() {
         return (
@@ -43,8 +36,12 @@ class App extends React.Component<any, any> {
                 <div className='App__body'>
                     <WidgetTab 
                         actions={{ save: this.save }} 
+                        category={this.state.category}
                     />
-                    <Renderer ref='renderer' />
+                    <Renderer 
+                        ref='renderer' 
+                        onClick={this.click}
+                    />
                 </div>
                 <div className='App__footer'>
                 </div>
@@ -62,34 +59,10 @@ class App extends React.Component<any, any> {
         }
     }
 
-    private onStyleChange(style: any) {
-        if (this.state.current) {
-            this.state.current.update(style);
-        }
-    }
-
-    private cancel() {
-        this.setState({ properties: [] });
-    }
-
-    private onStyleClose() {
-        this.setState({ openStylePanel: false });
-    }
-
-    private validate(values: any) {
-        this.setState({ properties: [] });
-        this.state.callback(values);
-    }
-
-    private onMenuChange(item: string) {
-        this.setState({ panel: item });
+    private click = (id: string, ...args: any[]) => {
+        const values = id.split('-');
+        this.setState({ category: values[values.length - 2] + '-properties' });
     }
 }
 
-const mapStateToProps = (state: IState) => {
-    return {
-        component: state.selected
-    };
-};
-
-export default DragDropContext(HTML5Backend)(connect<any, undefined>(mapStateToProps, undefined)(App));
+export default DragDropContext(HTML5Backend)(App);

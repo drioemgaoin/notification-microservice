@@ -39,7 +39,8 @@ export default class Structure extends React.Component<StructureProps, Structure
                                 key={id}
                                 id={this.props.id}
                                 ref={id}
-                                className='structure__content' 
+                                className='structure__content'
+                                actions={this.props.actions}
                             />
                         );
                     })

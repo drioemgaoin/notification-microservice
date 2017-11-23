@@ -4,8 +4,23 @@ import { upperFirst } from 'lodash';
 import Navbar from '../nav-bar/index';
 import Toolbox from '../../Toolbox';
 
-export default class WidgetTab extends React.Component<any, any> {
+interface WidgetTabProps {
+    category?: string;
+    actions: any;
+}
+
+interface WidgetTabState {
+    category: string;
+}
+
+export default class WidgetTab extends React.Component<WidgetTabProps, WidgetTabState> {
     state = { category: 'content' };
+
+    componentWillReceiveProps(nextProps: any) {
+        if (nextProps.category !== this.state.category) {
+            this.setState({ category: nextProps.category });
+        }
+    }
 
     render() {
         return (
@@ -30,6 +45,9 @@ export default class WidgetTab extends React.Component<any, any> {
     private onClick = (e: React.SyntheticEvent<HTMLLIElement>) => {
         e.preventDefault();
 
-        this.setState({ category: e.currentTarget.dataset['name'] });
+        const category = e.currentTarget.dataset['name'];
+        if (category) {
+            this.setState({ category });
+        }
     };
 }

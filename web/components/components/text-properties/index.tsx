@@ -12,7 +12,7 @@ export default class TextProperties extends React.Component<any, any> {
     render() {
         return (
             <div>
-                <Panel title='Content Properties'
+                <Panel title='Text Properties'
                     toolbar={this.renderToolbar()}
                 >
                     <Field label='Text color' >

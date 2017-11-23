@@ -13,6 +13,7 @@ interface ContainerDndProps {
 interface EmptyContainerProps extends ContainerDndProps {
     className: string;
     id: string;
+    actions: any;
 }
 
 const specTarget: DropTargetSpec<EmptyContainerProps> = {
@@ -54,7 +55,8 @@ export default class EmptyContainer extends React.Component<EmptyContainerProps,
                             {
                                 key: id,
                                 id,
-                                ref: id
+                                ref: id,
+                                actions: this.props.actions
                             }
                         )
                     })

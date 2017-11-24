@@ -60,21 +60,31 @@ const addChild = (state: IState, action: Action<any>) => {
 };
 
 const clone = (state: IState, action: Action<any>) => {
-    // TODO: clone a content element
+    const items = split(action.payload, '_');
+    const parent = state.components[items[0]];
+
     const component = state.components[action.payload];
     const values = split(action.payload, '-');
-    const id = slice(values, 0, values.length - 1) + '-' + (state.root.length + 1);
+    const id = join(slice(values, 0, values.length - 1), '-') + '-' + ((items.length > 1 ? parent.children : state.root).length + 1);
     
-    const root = state.root.slice();
-    const index = findIndex(root, x => x === action.payload);
-    root.splice(index + 1, 0, id);
+    let parentState = {};
+    if (items.length > 1) {
+        parentState = { [parent.id]: { ...parent, children: parent.children.concat([id]) }};
+    }
+
+    let root = state.root.slice();
+    if (items.length === 1) {
+        const index = findIndex(root, x => x === action.payload);
+        root.splice(index + 1, 0, id);
+    }
 
     return {
         ...state,
         root,
         components: {
             ...state.components,
-            [id]: { ...component, id, children: [] }
+            [id]: { ...component, id, children: [] },
+            ...parentState
         },
         selected: id, 
         highlighted: id

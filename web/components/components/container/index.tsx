@@ -53,12 +53,12 @@ const collectSource = (connect: DragSourceConnector, monitor: DragSourceMonitor)
 const specTarget: DropTargetSpec<ContainerProps> = {
     hover(props: ContainerProps, monitor: DropTargetMonitor, component: React.Component<ContainerProps, any>) {
         const item: any = monitor.getItem();
-
+        
         const drag = item.id;
 		const hover = props.id;
 
 		if (drag === hover) {
-			return
+            return
 		}
 
 		const hoverBoundingRect = ReactDOM.findDOMNode(component).getBoundingClientRect()
@@ -75,7 +75,7 @@ const specTarget: DropTargetSpec<ContainerProps> = {
 		}
 
         if (props.actions.move) {
-            props.actions.move(hover, drag)
+            props.actions.move(hover, drag);
         }
     }
 };

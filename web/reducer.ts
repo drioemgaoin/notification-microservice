@@ -48,17 +48,19 @@ const add = (state: IState, action: Action<any>) => {
 const addChild = (state: IState, action: Action<any>) => {
     const values = split(action.payload.id, '_');
     const parent = state.components[values[0]];
+    const id = values[0] + '_content-' + (parent.children.length + 1);
     return {
         ...state,
         components: {
             ...state.components,
-            [action.payload.id]: { ...action.payload, children: [], parentId: parent.id },
-            [parent.id]: { ...parent, children: parent.children.concat([action.payload.id]) }
+            [id]: { ...action.payload, id, children: [], parentId: action.payload.id },
+            [parent.id]: { ...parent, children: parent.children.concat([id]) }
         }
     }
 };
 
 const clone = (state: IState, action: Action<any>) => {
+    // TODO: clone a content element
     const component = state.components[action.payload];
     const values = split(action.payload, '-');
     const id = slice(values, 0, values.length - 1) + '-' + (state.root.length + 1);

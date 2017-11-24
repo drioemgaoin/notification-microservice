@@ -51,6 +51,7 @@ class App extends React.Component<AppProps, AppState> {
 
     private save = () => {
         const renderer = (this.refs['renderer'] as any).getWrappedInstance().decoratedComponentInstance;
+        console.log('SAVE')
         if (renderer) {
             var content = ReactDOMServer.renderToString(renderer.getValue());
             const mail: any = replace(htmlContent.toString(), '{content}', content);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import * as bem from 'bem-classname';
-import { assign, split } from 'lodash';
+import { assign, split, filter } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
 import { connect, Dispatch } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
@@ -77,11 +77,11 @@ class EmptyContainer extends React.Component<EmptyContainerProps, any> {
 
     getValue() {
         return (
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, flexDirection: 'column' }}>
             {
-                Object.keys(this.state.components).length > 0 
-                    ? Object.keys(this.refs).map((key: string) => {
-                        const component = (this.refs[key] as any).decoratedComponentInstance
+                this.props.components.length > 0 
+                    ? this.props.components.map((x: any) => {
+                        const component = (this.refs[x.id] as any).decoratedComponentInstance
                         return component.getValue();
                     })
                     : null
@@ -92,10 +92,11 @@ class EmptyContainer extends React.Component<EmptyContainerProps, any> {
 }
 
 const mapStateToProps = (state: IState, ownProps: any) => {
-    const component = state.components[ownProps.id];
+    const values = split(ownProps.id, '_');
+    const components = state.components[values[0]].children.map((x: any) => state.components[x]);
     return {
         ...ownProps,
-        components: !component ? [] : [component]
+        components: filter(components, (x: any) => x.parentId === ownProps.id)
     };
 };
 
@@ -105,4 +106,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     };
 };
 
-export default connect<EmptyContainerStateToProps, EmptyContainerDispatchToProps>(mapStateToProps, mapDispatchToProps)(EmptyContainer);
+export default connect<EmptyContainerStateToProps, EmptyContainerDispatchToProps>(mapStateToProps, mapDispatchToProps, null, { withRef: true })(EmptyContainer);

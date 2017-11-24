@@ -33,11 +33,11 @@ export default class Structure extends React.Component<StructureProps, Structure
                     style={this.state.style}>
                 {
                     times(this.props.numberOfColumns, (index: number) => {
-                        const id = this.props.id + '-' + index;
+                        const id = this.props.id + '_' + 'child-' + (index + 1);//this.props.id + '-' + index;
                         return (
                             <EmptyContainer 
                                 key={id}
-                                id={this.props.id + '_' + 'child-' + (index + 1)}
+                                id={id}
                                 ref={id}
                                 className='structure__content'
                             />
@@ -56,7 +56,7 @@ export default class Structure extends React.Component<StructureProps, Structure
             >
                 {
                     Object.keys(this.refs).map((key: string) => {
-                        const component = (this.refs[key] as any).decoratedComponentInstance
+                        const component = (this.refs[key] as any).getWrappedInstance().decoratedComponentInstance
                         return component.getValue();
                     })
                 }

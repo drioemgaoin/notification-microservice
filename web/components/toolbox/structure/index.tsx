@@ -37,10 +37,9 @@ export default class Structure extends React.Component<StructureProps, Structure
                         return (
                             <EmptyContainer 
                                 key={id}
-                                id={this.props.id}
+                                id={this.props.id + '_' + 'child-' + (index + 1)}
                                 ref={id}
                                 className='structure__content'
-                                actions={this.props.actions}
                             />
                         );
                     })

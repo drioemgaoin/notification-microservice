@@ -140,7 +140,7 @@ class Container extends React.Component<ContainerProps, any> {
     }
 
     private click = (action: string) => {
-        this.execute('toolbar', action);
+        this.props.handlers[action](this.props.id);
     }
 
     private select = (e: React.SyntheticEvent<HTMLSpanElement>) => {
@@ -148,8 +148,6 @@ class Container extends React.Component<ContainerProps, any> {
         e.stopPropagation();
 
         this.props.actions.select(this.props.id);
-
-        this.execute('component', 'click');
     }
 
     private highlight = (e: React.SyntheticEvent<HTMLSpanElement>) => {

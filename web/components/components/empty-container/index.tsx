@@ -1,30 +1,42 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import * as bem from 'bem-classname';
-import { assign } from 'lodash';
+import { assign, split } from 'lodash';
 import { DropTarget, DropTargetMonitor, DropTargetConnector, DropTargetSpec } from 'react-dnd';
+import { connect, Dispatch } from 'react-redux';
+import { bindActionCreators, compose } from 'redux';
 
 import Components from '../../toolbox/contentComponent';
+import actions from '../../../action';
+import { IState } from '../../../reducer';
 
-interface ContainerDndProps {
+interface EmptyContainerDndProps {
     connectDropTarget?: any;
 }
 
-interface EmptyContainerProps extends ContainerDndProps {
-    className: string;
+interface EmptyContainerStateToProps {
+    components: any;
+}
+
+interface EmptyContainerDispatchToProps {
+    actions: {
+        select: (id: string) => void;
+        add: (component: any) => void;
+        clone: (id: string) => void;
+        remove: (id: string) => void;
+        addChild: (component: any) => void;
+    }
+}
+
+interface EmptyContainerProps extends EmptyContainerStateToProps, EmptyContainerDispatchToProps, EmptyContainerDndProps {
+    className?: string;
     id: string;
-    actions: any;
 }
 
 const specTarget: DropTargetSpec<EmptyContainerProps> = {
     drop(props: EmptyContainerProps, monitor: DropTargetMonitor, component: React.Component<EmptyContainerProps, any>) {
         const item: any = monitor.getItem();
-
-        component.setState(prevState => ({
-            ...prevState, 
-            components: prevState.components.concat([item.name]),
-            style: assign({}, { ...prevState.style }, { 'align-items': 'stretch' }) 
-        }));
+        component.props.actions.addChild(assign({}, {...item}, { id: props.id }));
     }
 };
 
@@ -33,29 +45,26 @@ const collectTarget = (connect: DropTargetConnector, monitor: DropTargetMonitor)
 });
 
 @DropTarget('Element', specTarget, collectTarget)
-export default class EmptyContainer extends React.Component<EmptyContainerProps, any> {
-    state = { components: [] };
+class EmptyContainer extends React.Component<EmptyContainerProps, any> {
+    state = { components: {} };
     
     render() {
         let className = bem('empty-container', { 
-            empty: this.state.components.length === 0
+            empty: this.props.components.length === 0
         });
         className = cx(className, this.props.className);
 
         return this.props.connectDropTarget(
-            <div 
-                className={className}
-            >
+            <div className={className}>
                 {
-                    this.state.components.length > 0 
-                    ? this.state.components.map((component: string, index: number) => {
-                        const id = this.props.id + '-' + component.toLowerCase() + '-' + index;
+                    this.props.components.length > 0 
+                    ? this.props.components.map((component: any, index: number) => {
                         return React.createElement(
-                            (Components as any)[component],
+                            (Components as any)[component.name],
                             {
-                                key: id,
-                                id,
-                                ref: id,
+                                key: component.id,
+                                id: component.id,
+                                ref: component.id,
                                 actions: this.props.actions
                             }
                         )
@@ -70,7 +79,7 @@ export default class EmptyContainer extends React.Component<EmptyContainerProps,
         return (
             <div style={{ flex: 1 }}>
             {
-                this.state.components.length > 0 
+                Object.keys(this.state.components).length > 0 
                     ? Object.keys(this.refs).map((key: string) => {
                         const component = (this.refs[key] as any).decoratedComponentInstance
                         return component.getValue();
@@ -81,3 +90,19 @@ export default class EmptyContainer extends React.Component<EmptyContainerProps,
         );
     }
 }
+
+const mapStateToProps = (state: IState, ownProps: any) => {
+    const component = state.components[ownProps.id];
+    return {
+        ...ownProps,
+        components: !component ? [] : [component]
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+    return {
+        actions: bindActionCreators(actions, dispatch),
+    };
+};
+
+export default connect<EmptyContainerStateToProps, EmptyContainerDispatchToProps>(mapStateToProps, mapDispatchToProps)(EmptyContainer);

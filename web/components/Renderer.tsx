@@ -10,6 +10,10 @@ import BorderProperties from './components/border/BorderProperties';
 import actions from '../action';
 import { IState } from '../reducer';
 
+interface RendererDndProps {
+    connectDropTarget?: any;
+}
+
 interface RendererStateToProps {
     components: any[];
 }
@@ -23,20 +27,19 @@ interface RendererDispatchToProps {
     }
 }
 
-interface RendererProps extends RendererStateToProps, RendererDispatchToProps {
-    connectDropTarget?: any;
+interface RendererProps extends RendererStateToProps, RendererDispatchToProps, RendererDndProps {
     onClick?: (component: any) => void;
 }
 
 interface RendererState {
-    components: Array<any>;
+    components: any[];
 }
 
 const specTarget: DropTargetSpec<RendererProps> = {
     drop(props: RendererProps, monitor: DropTargetMonitor, component: React.Component<RendererProps, RendererState>) {
         const item: any = monitor.getItem();
         if (!item.rendered) {
-            component.props.actions.add(assign({}, {...item}, { id: 'structure-' + (component.props.components.length + 1) }));
+            component.props.actions.add(assign({}, {...item}));
         }
     }
 }
@@ -52,7 +55,7 @@ class Renderer extends React.Component<RendererProps, RendererState> {
             this.props.connectDropTarget(
                 <div className='Renderer'>
                     {
-                        this.props.components.map((component, index) => {
+                        this.props.components.map((component: any, index: number) => {
                             return React.createElement(
                                 (Components as any)[component.name],
                                 {
@@ -60,15 +63,7 @@ class Renderer extends React.Component<RendererProps, RendererState> {
                                     id: component.id,
                                     ref: component.id,
                                     rendered: true,
-                                    actions: {
-                                        toolbar: {
-                                            remove: this.remove,
-                                            clone: this.clone
-                                        },
-                                        component: {
-                                            click: this.props.onClick
-                                        }
-                                    },
+                                    actions: this.props.actions,
                                     ...assign({}, component.properties)
                                 }
                             )
@@ -95,7 +90,7 @@ class Renderer extends React.Component<RendererProps, RendererState> {
 const mapStateToProps = (state: IState, ownProps: RendererProps) => {
     return {
         ...ownProps,
-        components: state.components
+        components: state.root.map((id: any) => state.components[id])
     };
 };
 
